@@ -2,27 +2,93 @@
 
 
 #include "CardNode.h"
-TArray<UEffectBlock*> UCardNode::Build() {
-	if (this->IsTerminal()) {
-		return {NewObject<UEffectBlock>()->WithImpact(Cast<UCardImpact>(this->Ingredient))};
+#include "Card Effects/Enchantments/CardEnchantment.h"
+
+bool UCardNode::AddSuccessor(UCardNode* Node) {
+	if (IsValid(Node->Predecessor) || this->Successors.Contains(Node)) {
+		return false;
 	}
 
-	TArray<UEffectBlock*> Blocks = {};
+	Node->Predecessor = this;
+	this->Successors.Add(Node);
+	return true;
+}
+
+bool UCardNode::BreakLinkWith(UCardNode* Node) {
+	if (!IsValid(Node)) {
+		return false;
+	}
+		
+	if (this->Precedes(Node)) {
+		Node->Predecessor = nullptr;
+		this->Successors.Remove(Node);
+		return true;
+	}
+
+	if (this->Succeeds(Node)) {
+		this->Predecessor = nullptr;
+		Node->Successors.Remove(this);
+		return true;
+	}
+		
+	return false;
+}
+
+int UCardNode::CountBuildableConnectedNodes() {
+	int Count = 0;
+	TSet<UCardNode*> Visited = {};
+	TQueue<UCardNode*> Queue = {};
+	Queue.Enqueue(this);
+	UCardNode* Curr;
+	while (Queue.Dequeue(Curr)) {
+		Visited.Add(Curr);
+		if (Curr->IsReadyToCraft()) {
+			Count += 1;
+		}
+
+		if (IsValid(this->Predecessor) && !Visited.Contains(this->Predecessor)) {
+			Queue.Enqueue(this->Predecessor);
+		}
+        	
+		for (auto& Successor : Curr->Successors) {
+			if (!Visited.Contains(Successor)) {
+				Queue.Enqueue(Successor);
+			}
+		}
+	}
+		
+	return Count;
+}
+
+TArray<UCardEffect*> UCardNode::Build() {
+	if (this->IsTerminal()) {
+		return {Cast<UCardImpact>(this->Ingredient)->Apply()};
+	}
+
+	TArray<UCardEffect*> CardEffects = {};
 	
 	if (this->Ingredient->IsA(UCardEnchantment::StaticClass())) {
 		UCardEnchantment* Enchantment = Cast<UCardEnchantment>(this->Ingredient);
-		for (UCardNode* Successor : this->Successors) {
-			for (UEffectBlock* Block : Successor->Build()) {
-				Blocks.Add(Block->Append(Enchantment));
+		for (const auto& Successor : this->Successors) {
+			for (const auto& CardEffect : Successor->Build()) {
+				CardEffects.Add(Enchantment->Enchant(CardEffect));
 			}
 		}
 		
-		return Blocks;
+		return CardEffects;
 	}
 
-	for (UCardNode* Successor : this->Successors) {
-		Blocks.Append(Successor->Build());
+	for (const auto& Successor : this->Successors) {
+		CardEffects.Append(Successor->Build());
 	}
 	
-	return Blocks;
+	return CardEffects;
+}
+
+UCardNode* UCardNode::GetRoot() {
+	if (!IsValid(this->Predecessor)) {
+		return this;
+	}
+
+	return this->Predecessor->GetRoot();
 }

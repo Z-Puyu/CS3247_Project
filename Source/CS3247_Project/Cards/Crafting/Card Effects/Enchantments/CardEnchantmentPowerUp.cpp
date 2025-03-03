@@ -4,6 +4,12 @@
 #include "CardEnchantmentPowerUp.h"
 
 UCardEffect* UCardEnchantmentPowerUp::Enchant(UCardEffect* Effect) {
-	Effect->Multiplier += this->Value;
+	const double Ratio = FMath::Max(1 + this->Value / 100.0, 1.0);
+	Effect->BaseDamage *= Ratio;
+	Effect->HealAmount *= Ratio;
+	for (auto& ExtraDamage : Effect->ExtraDamageEffects) {
+		Effect->ExtraDamageEffects[ExtraDamage.Key] *= Ratio;
+	}
+	
 	return Effect;
 }

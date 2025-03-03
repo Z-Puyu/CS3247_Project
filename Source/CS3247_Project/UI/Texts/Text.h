@@ -14,15 +14,15 @@ class CS3247_PROJECT_API UText : public UObject {
 	GENERATED_BODY()
 
 public:
-	static FString Bf(FString Str);
+	static FString Bf(const FString& Str);
 
-	static FString It(FString Str);
+	static FString It(const FString& Str);
 
-	static FString BfIt(FString Str);
+	static FString BfIt(const FString& Str);
 
-	static FString Rm(FString Str);
+	static FString Rm(const FString& Str);
 
-	static FString Red(FString Str);
+	static FString Red(const FString& Str);
 
-	static FString Green(FString Str);
+	static FString Green(const FString& Str);
 };

@@ -4,7 +4,7 @@
 #include "CardEnchantmentComposite.h"
 
 UCardEffect* UCardEnchantmentComposite::Enchant(UCardEffect* Effect) {
-	for (TSoftObjectPtr<UCardEnchantment> Enchantment : this->Enchantments) {
+	for (auto& Enchantment : this->Enchantments) {
 		Effect = Enchantment.Get()->Enchant(Effect);	
 	}
 	

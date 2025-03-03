@@ -2,6 +2,7 @@
 
 
 #include "Card.h"
+#include "Crafting/Card Effects/CardEffect.h"
 
 UCard::UCard() {
 	this->Cost = 0;
@@ -11,7 +12,7 @@ UCard::UCard() {
 
 FText UCard::GetDescription() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
-	for (const UEffectBlock* Effect : this->Effects) {
+	for (auto& Effect : this->Effects) {
 		Sb.Appendf(TEXT("%s\n"), *Effect->ToRichText());
 	}
 	
@@ -19,7 +20,7 @@ FText UCard::GetDescription() const {
 }
 
 void UCard::GetCardInfo(FText& CardName, FText& Desc, int& UseCost, int& CardDurability,
-	TArray<UEffectBlock*>& CardEffects) const {
+	TArray<UCardEffect*>& CardEffects) const {
 	CardName = this->Name;
 	Desc = this->GetDescription();
 	UseCost = this->Cost;

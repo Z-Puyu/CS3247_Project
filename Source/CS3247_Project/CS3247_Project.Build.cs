@@ -12,12 +12,14 @@ public class CS3247_Project : ModuleRules
 			"Core", 
 			"CoreUObject", 
 			"Engine", 
-			"InputCore",
-			"GameplayTags",
-			"GameplayAbilities"
+			"InputCore"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] {
+			"GameplayTags",
+			"GameplayAbilities",
+			"GameplayTasks"
+		});
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

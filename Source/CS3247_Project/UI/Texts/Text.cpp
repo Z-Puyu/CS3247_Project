@@ -2,26 +2,26 @@
 
 
 #include "Text.h"
-FString UText::Bf(FString Str) {
+FString UText::Bf(const FString& Str) {
 	return "<bf>" + Str + "</>";
 }
 
-FString UText::It(FString Str) {
+FString UText::It(const FString& Str) {
 	return "<it>" + Str + "</>";
 }
 
-FString UText::BfIt(FString Str) {
+FString UText::BfIt(const FString& Str) {
 	return "<bfit>" + Str + "</>";
 }
 
-FString UText::Rm(FString Str) {
+FString UText::Rm(const FString& Str) {
 	return "<rm>" + Str + "</>";
 }
 
-FString UText::Red(FString Str) {
+FString UText::Red(const FString& Str) {
 	return "<red>" + Str + "</>";
 }
 
-FString UText::Green(FString Str) {
+FString UText::Green(const FString& Str) {
 	return "<green>" + Str + "</>";
 }

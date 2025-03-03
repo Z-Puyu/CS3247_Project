@@ -7,11 +7,7 @@
 
 UCardEffect* UCardImpactDamage::Apply() {
 	UCardEffect* Data = Super::Apply();
-	if (Data->Damages.Contains(this->DamageType)) {
-		Data->Damages[this->DamageType] += this->Value;
-	} else {
-		Data->Damages.Add(this->DamageType, this->Value);
-	}
+	Data->BaseDamage = FDamageData(this->DamageType, this->Value);
 	return Data;
 }
 
