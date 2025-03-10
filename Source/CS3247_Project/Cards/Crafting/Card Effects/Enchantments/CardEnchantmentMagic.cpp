@@ -7,6 +7,8 @@ UCardEffect* UCardEnchantmentMagic::Enchant(UCardEffect* Effect) {
 	const double ExtraDamageAmount = Effect->BaseDamage.DamageValue * this->Strength / 100.0;
 	if (Effect->ExtraDamageEffects.Contains(this->EnchantmentType)) {
 		Effect->ExtraDamageEffects[this->EnchantmentType] += ExtraDamageAmount;
+	} else {
+		Effect->ExtraDamageEffects.Add(this->EnchantmentType, FDamageData(this->EnchantmentType, ExtraDamageAmount));
 	}
 
 	return Effect;

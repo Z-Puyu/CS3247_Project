@@ -34,6 +34,16 @@ bool UCardNode::BreakLinkWith(UCardNode* Node) {
 	return false;
 }
 
+void UCardNode::BreakAllLinks() {
+	if (IsValid(this->Predecessor)) {
+		this->Predecessor->BreakLinkWith(this);
+	}
+
+	for (const auto& Successor : this->Successors) {
+		Successor->BreakLinkWith(this);
+	}
+}
+
 int UCardNode::CountBuildableConnectedNodes() {
 	int Count = 0;
 	TSet<UCardNode*> Visited = {};
@@ -61,6 +71,7 @@ int UCardNode::CountBuildableConnectedNodes() {
 }
 
 TArray<UCardEffect*> UCardNode::Build() {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Building from ") + this->Ingredient->GetName());
 	if (this->IsTerminal()) {
 		return {Cast<UCardImpact>(this->Ingredient)->Apply()};
 	}
@@ -92,3 +103,4 @@ UCardNode* UCardNode::GetRoot() {
 
 	return this->Predecessor->GetRoot();
 }
+

@@ -22,31 +22,29 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool AddSuccessor(UCardNode* Node);
-
-	UFUNCTION(BlueprintCallable)
+	
 	FORCEINLINE bool Precedes(UCardNode* Node) const { return Node->Predecessor == this; }
-
-	UFUNCTION(BlueprintCallable)
+	
 	FORCEINLINE bool Succeeds(UCardNode* Node) const { return this->Predecessor == Node; }
 
 	UFUNCTION(BlueprintCallable)
 	bool BreakLinkWith(UCardNode* Node);
-
-	UFUNCTION(BlueprintCallable)
+	
+	void BreakAllLinks();
+	
 	int CountBuildableConnectedNodes();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	TArray<UCardEffect*> Build();
-
-	UFUNCTION(BlueprintCallable)
+	
 	FORCEINLINE bool IsReadyToCraft() const { return this->IsTerminal() || this->Successors.Num() > 0; }
-
-	UFUNCTION(BlueprintCallable)
+	
 	UCardNode* GetRoot();
 private:
 	UPROPERTY()
 	UCardNode* Predecessor;
-	
+
+	UPROPERTY()
 	TSet<UCardNode*> Successors;
 	
 	FORCEINLINE bool IsTerminal() const {

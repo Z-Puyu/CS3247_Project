@@ -26,7 +26,7 @@ public:
 	int Durability;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
-	TArray<UCardEffect*> Effects;
+	TArray<TObjectPtr<UCardEffect>> Effects;
 	
 	UCard();
 
