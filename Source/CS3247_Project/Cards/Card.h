@@ -3,16 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../UI/Texts/TextDescribable.h"
-#include "Crafting/Card Effects/CardEffect.h"
+#include "../UI/Texts/Localisable.h"
 #include "Card.generated.h"
+
+class ILocalisable;
+class UCardRecipe;
+class UCardEffect;
 
 #define DURABILITY_COEFFICIENT 100.0
 /**
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class CS3247_PROJECT_API UCard : public UObject, public ITextDescribable {
+class CS3247_PROJECT_API UCard : public UObject, public ILocalisable {
 	GENERATED_BODY()
 
 public:
@@ -27,12 +30,23 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
 	TArray<TObjectPtr<UCardEffect>> Effects;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(ExposeOnSpawn))
+	TObjectPtr<UCardRecipe> Recipe;
 	
 	UCard();
+	
+	virtual FText ToText() const override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual FText GetDescription() const override;
+	virtual FText ToRichText() const override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction = "true"))
 	void GetCardInfo(FText& CardName, FText& Desc, int& UseCost, int& CardDurability, TArray<UCardEffect*>& CardEffects) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Card Info")
+	FORCEINLINE void GetCardData(int& UseCost, int& CardDurability, TArray<UCardEffect*>& CardEffects) const {
+		UseCost = this->Cost;
+		CardDurability = this->Durability;
+		CardEffects = this->Effects;
+	}
 };

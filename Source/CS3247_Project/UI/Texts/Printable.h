@@ -4,21 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "TextDescribable.generated.h"
+#include "Printable.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE()
-class UTextDescribable : public UInterface {
+UINTERFACE(NotBlueprintable, MinimalAPI)
+class UPrintable : public UInterface {
 	GENERATED_BODY()
 };
 
 /**
- * 
+ * An interface for classes that can be converted to a debugging string.
+ * Commonly used for things that need to be logged or printed to the screen.
  */
-class CS3247_PROJECT_API ITextDescribable {
+class CS3247_PROJECT_API IPrintable {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual FText GetDescription() const = 0;
+	UFUNCTION(BlueprintCallable)
+	virtual FString ToString() const = 0;
 };

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "CardImpact.h"
 #include "GameplayTagContainer.h"
-#include "../CardEffect.h"
 #include "CardImpactDamage.generated.h"
 
 /**
@@ -16,16 +15,17 @@ class CS3247_PROJECT_API UCardImpactDamage : public UCardImpact {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(Categories="Damage"))
+	UPROPERTY(EditDefaultsOnly, meta=(Categories="Damage"))
 	FGameplayTag DamageType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, meta=(Categories="Damage"))
 	int32 Value;
 	
-	virtual UCardEffect* Apply() override;
+	virtual UCardEffect* Apply(UCard* OwningCard) override;
 
-	virtual FString ToRichText() const override;
+	virtual FString ToString() const override;
 
-private:
-	FString GetDamageType() const;
+	virtual FText ToText() const override;
+
+	virtual FText ToRichText() const override;
 };

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CardImpact.h"
-#include "../CardEffect.h"
 #include "CardImpactHeal.generated.h"
 
 /**
@@ -15,10 +14,14 @@ class CS3247_PROJECT_API UCardImpactHeal : public UCardImpact {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, Category = "Heal")
 	int32 Value;
 	
-	virtual UCardEffect* Apply() override;
+	virtual UCardEffect* Apply(UCard* OwningCard) override;
 	
-	virtual FString ToRichText() const override;
+	virtual FString ToString() const override;
+	
+	virtual FText ToText() const override;
+	
+	virtual FText ToRichText() const override;
 };

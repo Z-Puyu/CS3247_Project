@@ -14,15 +14,27 @@ class CS3247_PROJECT_API UText : public UObject {
 	GENERATED_BODY()
 
 public:
-	static FString Bf(const FString& Str);
+	FORCEINLINE static FText Bf(const FString& Str) {
+		return FText::FromString(TEXT("<bf>" + Str + "</bf>"));
+	}
 
-	static FString It(const FString& Str);
+	FORCEINLINE static FText It(const FString& Str) {
+		return FText::FromString(TEXT("<it>" + Str + "</it>"));
+	}
 
-	static FString BfIt(const FString& Str);
+	FORCEINLINE static FText BfIt(const FString& Str) {
+		return FText::FromString(TEXT("<bfit>" + Str + "</bfit>"));
+	}
 
-	static FString Rm(const FString& Str);
+	FORCEINLINE static FText Rm(const FString& Str) {
+		return FText::FromString(TEXT("<rm>" + Str + "</rm>"));
+	}
 
-	static FString Red(const FString& Str);
+	FORCEINLINE static FText Red(const FString& Str) {
+		return FText::FromString(TEXT("<red>" + Str + "</red>"));
+	}
 
-	static FString Green(const FString& Str);
+	FORCEINLINE static FText Green(const FString& Str) {
+		return FText::FromString(TEXT("<green>" + Str + "</green>"));
+	}
 };

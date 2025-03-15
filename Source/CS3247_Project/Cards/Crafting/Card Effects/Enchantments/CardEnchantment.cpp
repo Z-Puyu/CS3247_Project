@@ -3,6 +3,4 @@
 
 #include "CardEnchantment.h"
 
-UCardEffect* UCardEnchantment::Enchant(UCardEffect* Effect) {
-	return Effect;	
-}
+

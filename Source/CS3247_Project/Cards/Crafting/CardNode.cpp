@@ -4,103 +4,108 @@
 #include "CardNode.h"
 #include "Card Effects/Enchantments/CardEnchantment.h"
 
-bool UCardNode::AddSuccessor(UCardNode* Node) {
-	if (IsValid(Node->Predecessor) || this->Successors.Contains(Node)) {
+bool UCardNode::AddSuccessor(UCardNode* Node, FText& ErrorMsg) {
+	if (!IsValid(Node)) {
+		ErrorMsg = FText::FromString(TEXT("The parent node is not alive."));
+		return false;
+	}
+	
+	// If the node already has a predecessor, cannot link.
+	if (IsValid(Node->Predecessor)) {
+		ErrorMsg = FText::FromString(TEXT("The child node already has a predecessor. Unlink first."));
 		return false;
 	}
 
-	Node->Predecessor = this;
-	this->Successors.Add(Node);
-	return true;
+	// If the node is already a successor, cannot re-link.
+	if (Node == this->FirstSuccessor || Node == this->SecondSuccessor) {
+		ErrorMsg = FText::FromString(TEXT("The child node is already a successor. Duplicated link."));
+		return false;
+	}
+
+	if (!IsValid(this->FirstSuccessor)) {
+		this->FirstSuccessor = Node;
+		Node->Predecessor = this;
+		return true;
+	}
+
+	if (!IsValid(this->SecondSuccessor)) {
+		this->SecondSuccessor = Node;
+		Node->Predecessor = Node;
+		return true;
+	}
+
+	// The node already has two children.
+	ErrorMsg = FText::FromString(TEXT("The parent node already has two successors. Unlink one of them first."));
+	return false;
 }
 
-bool UCardNode::BreakLinkWith(UCardNode* Node) {
+bool UCardNode::BreakLinkWith(UCardNode* Node, FText& ErrorMsg) {
 	if (!IsValid(Node)) {
+		ErrorMsg = FText::FromString(TEXT("The other node is not alive."));
 		return false;
 	}
-		
-	if (this->Precedes(Node)) {
+
+	if (Node == this->Predecessor) {
+		FText Empty = FText::GetEmpty();
+		return Node->BreakLinkWith(this, Empty);
+	}
+
+	if (Node == this->FirstSuccessor && this == Node->Predecessor) {
+		this->FirstSuccessor = nullptr;
 		Node->Predecessor = nullptr;
-		this->Successors.Remove(Node);
 		return true;
 	}
 
-	if (this->Succeeds(Node)) {
-		this->Predecessor = nullptr;
-		Node->Successors.Remove(this);
+	if (Node == this->SecondSuccessor && this == Node->Predecessor) {
+		this->SecondSuccessor = nullptr;
+		Node->Predecessor = nullptr;
 		return true;
 	}
-		
+
+	ErrorMsg = FText::Format(FTextFormat::FromString("{0} and {1} are not connected"),
+		this->ToText(), Node->ToText());
 	return false;
 }
 
 void UCardNode::BreakAllLinks() {
+	FText Empty = FText::GetEmpty();
 	if (IsValid(this->Predecessor)) {
-		this->Predecessor->BreakLinkWith(this);
+		this->Predecessor->BreakLinkWith(this, Empty);
 	}
 
-	for (const auto& Successor : this->Successors) {
-		Successor->BreakLinkWith(this);
-	}
+	this->FirstSuccessor->BreakLinkWith(this, Empty);
+	this->SecondSuccessor->BreakLinkWith(this, Empty);
 }
 
-int UCardNode::CountBuildableConnectedNodes() {
-	int Count = 0;
-	TSet<UCardNode*> Visited = {};
-	TQueue<UCardNode*> Queue = {};
-	Queue.Enqueue(this);
-	UCardNode* Curr;
-	while (Queue.Dequeue(Curr)) {
-		Visited.Add(Curr);
-		if (Curr->IsReadyToCraft()) {
-			Count += 1;
-		}
-
-		if (IsValid(this->Predecessor) && !Visited.Contains(this->Predecessor)) {
-			Queue.Enqueue(this->Predecessor);
-		}
-        	
-		for (auto& Successor : Curr->Successors) {
-			if (!Visited.Contains(Successor)) {
-				Queue.Enqueue(Successor);
-			}
-		}
-	}
-		
-	return Count;
-}
-
-TArray<UCardEffect*> UCardNode::Build() {
+TArray<TObjectPtr<UCardEffect>> UCardNode::Build(UCard* OwningCard) {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Building from ") + this->Ingredient->GetName());
+	// If this is a leaf node, we expect it to be an impact, so just build.
 	if (this->IsTerminal()) {
-		return {Cast<UCardImpact>(this->Ingredient)->Apply()};
+		return {this->Ingredient->Apply(OwningCard)};
 	}
 
-	TArray<UCardEffect*> CardEffects = {};
+	TArray<TObjectPtr<UCardEffect>> CardEffects = {};
+	// Otherwise, build the first successor.
+	TArray<TObjectPtr<UCardEffect>> LeftSubtree = this->FirstSuccessor->Build(OwningCard);
+	
+	
+	
 	
 	if (this->Ingredient->IsA(UCardEnchantment::StaticClass())) {
 		UCardEnchantment* Enchantment = Cast<UCardEnchantment>(this->Ingredient);
-		for (const auto& Successor : this->Successors) {
+		/*for (const auto& Successor : this->Successors) {
 			for (const auto& CardEffect : Successor->Build()) {
 				CardEffects.Add(Enchantment->Enchant(CardEffect));
 			}
-		}
+		}*/
 		
 		return CardEffects;
 	}
 
-	for (const auto& Successor : this->Successors) {
+	/*for (const auto& Successor : this->Successors) {
 		CardEffects.Append(Successor->Build());
-	}
+	}*/
 	
 	return CardEffects;
-}
-
-UCardNode* UCardNode::GetRoot() {
-	if (!IsValid(this->Predecessor)) {
-		return this;
-	}
-
-	return this->Predecessor->GetRoot();
 }
 

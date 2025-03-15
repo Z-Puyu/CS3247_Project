@@ -3,29 +3,53 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../../../UI/Texts/Localisable.h"
+#include "../../../UI/Texts/Printable.h"
 #include "Engine/DataAsset.h"
 #include "CardIngredient.generated.h"
 
+class UCard;
+class UCardEffect;
 /**
- * 
+ * The abstract base class for all card ingredients in crafting.
  */
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class CS3247_PROJECT_API UCardIngredient : public UDataAsset {
+class CS3247_PROJECT_API UCardIngredient : public UDataAsset, public IPrintable, public ILocalisable {
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basic Info")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
 	FText Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basic Info")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
 	FText Desc;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Basic Info")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
 	TSoftObjectPtr<UTexture2D> Icon;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cost")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
 	double UseCost;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cost")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
 	int32 CraftCost;
+
+	/**
+	 * Create a new card effect based on the effects of this ingredient.
+	 * @param[in] OwningCard The card that owns this effect.
+	 * @return The new effect.
+	 */
+	virtual UCardEffect* Apply(UCard* OwningCard);
+
+	/**
+	 * Modify an existing card effect based on the effects of this ingredient.
+	 * @param Current The current effect. 
+	 * @return The new effect.
+	 */
+	virtual UCardEffect* ComposeTo(UCardEffect* Current);
+
+	virtual FString ToString() const override;
+
+	virtual FText ToText() const override;
+
+	virtual FText ToRichText() const override;
 };
