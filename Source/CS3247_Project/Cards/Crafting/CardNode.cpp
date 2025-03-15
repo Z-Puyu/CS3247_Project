@@ -83,28 +83,18 @@ TArray<TObjectPtr<UCardEffect>> UCardNode::Build(UCard* OwningCard) {
 	if (this->IsTerminal()) {
 		return {this->Ingredient->Apply(OwningCard)};
 	}
-
-	TArray<TObjectPtr<UCardEffect>> CardEffects = {};
+	
 	// Otherwise, build the first successor.
-	TArray<TObjectPtr<UCardEffect>> LeftSubtree = this->FirstSuccessor->Build(OwningCard);
-	
-	
-	
-	
-	if (this->Ingredient->IsA(UCardEnchantment::StaticClass())) {
-		UCardEnchantment* Enchantment = Cast<UCardEnchantment>(this->Ingredient);
-		/*for (const auto& Successor : this->Successors) {
-			for (const auto& CardEffect : Successor->Build()) {
-				CardEffects.Add(Enchantment->Enchant(CardEffect));
-			}
-		}*/
-		
-		return CardEffects;
+	TArray<TObjectPtr<UCardEffect>> SuccessorEffects = this->FirstSuccessor->Build(OwningCard);
+	if (IsValid(this->SecondSuccessor)) {
+		// If there is a second successor, then this node must be a control flow node.
+		this->Ingredient->Merge(SuccessorEffects, this->SecondSuccessor->Build(OwningCard));
 	}
 
-	/*for (const auto& Successor : this->Successors) {
-		CardEffects.Append(Successor->Build());
-	}*/
+	TArray<TObjectPtr<UCardEffect>> CardEffects = {};
+	for (auto& CardEffect : CardEffects) {
+		CardEffects.Add(this->Ingredient->ComposeTo(CardEffect));
+	}
 	
 	return CardEffects;
 }

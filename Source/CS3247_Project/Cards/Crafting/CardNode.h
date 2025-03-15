@@ -51,9 +51,9 @@ private:
 	UPROPERTY()
 	TObjectPtr<UCardNode> Predecessor;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCardNode> FirstSuccessor;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCardNode> SecondSuccessor;
 };

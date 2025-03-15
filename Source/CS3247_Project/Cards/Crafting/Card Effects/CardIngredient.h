@@ -47,6 +47,11 @@ public:
 	 */
 	virtual UCardEffect* ComposeTo(UCardEffect* Current);
 
+	FORCEINLINE virtual void Merge(TArray<TObjectPtr<UCardEffect>>& Base,
+		const TArray<TObjectPtr<UCardEffect>> Others) {
+		Base.Append(Others);
+	}
+
 	virtual FString ToString() const override;
 
 	virtual FText ToText() const override;
