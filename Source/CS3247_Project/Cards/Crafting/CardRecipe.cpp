@@ -2,11 +2,11 @@
 
 
 #include "CardRecipe.h"
-#include "CardNode.h"
+#include "Nodes/CardNode.h"
 #include "../Card.h"
 
 UCard* UCardRecipe::Forge(UActorComponent* PlayerDeckComponent) const {
 	UCard* Card = NewObject<UCard>(PlayerDeckComponent);
-	Card->Effects = this->Source->Build(Card);
+	Card->Effects = this->Source.Get()->Build(Card);
 	return Card;
 }

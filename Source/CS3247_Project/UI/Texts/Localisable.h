@@ -7,7 +7,7 @@
 #include "Localisable.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, MinimalAPI)
+UINTERFACE(Blueprintable, BlueprintType, MinimalAPI)
 class ULocalisable : public UInterface {
 	GENERATED_BODY()
 };
@@ -21,9 +21,13 @@ class CS3247_PROJECT_API ILocalisable {
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintCallable)
-	virtual FText ToText() const = 0;
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Text Conversion")
+	FText ToText() const;
 
-	UFUNCTION(BlueprintCallable)
-	virtual FText ToRichText() const = 0;
+	virtual FText ToText_Implementation() const { return FText::GetEmpty(); }
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Text Conversion")
+	FText ToRichText() const;
+
+	virtual FText ToRichText_Implementation() const { return FText::GetEmpty(); }
 };

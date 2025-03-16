@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class CS3247_PROJECT_API USpecialEffect : public UAtomicCardEffect {
 	GENERATED_BODY()
 

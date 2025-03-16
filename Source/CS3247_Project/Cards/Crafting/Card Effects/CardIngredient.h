@@ -8,6 +8,7 @@
 #include "Engine/DataAsset.h"
 #include "CardIngredient.generated.h"
 
+class UCardNode;
 class UCard;
 class UCardEffect;
 /**
@@ -18,6 +19,8 @@ class CS3247_PROJECT_API UCardIngredient : public UDataAsset, public IPrintable,
 	GENERATED_BODY()
 	
 public:
+	__readonly FGuid Id;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
 	FText Name;
 
@@ -33,28 +36,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
 	int32 CraftCost;
 
-	/**
-	 * Create a new card effect based on the effects of this ingredient.
-	 * @param[in] OwningCard The card that owns this effect.
-	 * @return The new effect.
-	 */
-	virtual UCardEffect* Apply(UCard* OwningCard);
+	UCardIngredient() : Id(FGuid::NewGuid()), UseCost(0), CraftCost(0) {}
 
-	/**
-	 * Modify an existing card effect based on the effects of this ingredient.
-	 * @param Current The current effect. 
-	 * @return The new effect.
-	 */
-	virtual UCardEffect* ComposeTo(UCardEffect* Current);
+	UFUNCTION(BlueprintCallable)
+	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter);
 
-	FORCEINLINE virtual void Merge(TArray<TObjectPtr<UCardEffect>>& Base,
-		const TArray<TObjectPtr<UCardEffect>> Others) {
-		Base.Append(Others);
-	}
+	virtual FString ToString_Implementation() const override;
 
-	virtual FString ToString() const override;
+	virtual FText ToText_Implementation() const override;
 
-	virtual FText ToText() const override;
-
-	virtual FText ToRichText() const override;
+	virtual FText ToRichText_Implementation() const override;
 };

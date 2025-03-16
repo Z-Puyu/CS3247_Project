@@ -15,15 +15,15 @@ void UManaCostEffect::OffsetStrength(const double Offset) {
 	this->ManaCost += Offset;
 }
 
-FString UManaCostEffect::ToString() const {
+FString UManaCostEffect::ToString_Implementation() const {
 	return FString::Printf(TEXT("Effect: use %d mana"), this->ManaCost);
 }
 
-FText UManaCostEffect::ToText() const {
+FText UManaCostEffect::ToText_Implementation() const {
 	return FText::FromString(FString::FromInt(this->ManaCost));
 }
 
-FText UManaCostEffect::ToRichText() const {
+FText UManaCostEffect::ToRichText_Implementation() const {
 	return UText::Bf(FString::FromInt(this->ManaCost));
 }
 

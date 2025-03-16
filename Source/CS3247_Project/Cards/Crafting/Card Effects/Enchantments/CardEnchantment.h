@@ -11,4 +11,14 @@
 UCLASS(Abstract)
 class CS3247_PROJECT_API UCardEnchantment : public UCardIngredient {
 	GENERATED_BODY()
+
+public:
+	/**
+	 * Modify an existing card effect based on the effects of this ingredient.
+	 * @param Current The current effect. 
+	 * @return The new effect.
+	 */
+	virtual UCardEffect* ComposeTo(UCardEffect* Current);
+
+	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
 };

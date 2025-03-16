@@ -8,7 +8,7 @@
 
 UCardEffect* UCardEnchantmentPowerUp::ComposeTo(UCardEffect* Effect) {
 	const double Ratio = FMath::Max(1 + this->Value / 100.0, 1.0);
-	for (auto& Entry : Effect->AtomicEffects) {
+	for (const auto& Entry : Effect->AtomicEffects) {
 		if (this->IsApplicableTo(Entry.Value)) {
 			Entry.Value->ScaleStrength(Ratio);
 		}
@@ -17,15 +17,15 @@ UCardEffect* UCardEnchantmentPowerUp::ComposeTo(UCardEffect* Effect) {
 	return Effect;
 }
 
-FString UCardEnchantmentPowerUp::ToString() const {
+FString UCardEnchantmentPowerUp::ToString_Implementation() const {
 	return FString::Printf(TEXT("%d%% power up"), this->Value);
 }
 
-FText UCardEnchantmentPowerUp::ToText() const {
+FText UCardEnchantmentPowerUp::ToText_Implementation() const {
 	return FText::FromString(FString::Printf(TEXT("Subsequent effects become %d%% stronger"), this->Value));
 }
 
-FText UCardEnchantmentPowerUp::ToRichText() const {
+FText UCardEnchantmentPowerUp::ToRichText_Implementation() const {
 	return FText::Format(FTextFormat::FromString(TEXT("Subsequent effects become {0}% stronger")),
 		UText::Green(FString::FromInt(this->Value)));
 }

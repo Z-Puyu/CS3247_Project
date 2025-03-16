@@ -10,31 +10,33 @@
  * 
  */
 UCLASS()
-class CS3247_PROJECT_API UText : public UObject {
+class CS3247_PROJECT_API UText : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE static FText Bf(const FString& Str) {
-		return FText::FromString(TEXT("<bf>" + Str + "</bf>"));
+	UFUNCTION(BlueprintCallable, Category = "Rich-Text Formatting")
+	static FORCEINLINE FText Bf(const FString& Str) {
+		return FText::FromString(TEXT("<bf>" + Str + "</>"));
 	}
 
-	FORCEINLINE static FText It(const FString& Str) {
-		return FText::FromString(TEXT("<it>" + Str + "</it>"));
+	UFUNCTION(BlueprintCallable, Category = "Rich-Text Formatting")
+	static FORCEINLINE FText It(const FString& Str) {
+		return FText::FromString(TEXT("<it>" + Str + "</>"));
 	}
 
 	FORCEINLINE static FText BfIt(const FString& Str) {
-		return FText::FromString(TEXT("<bfit>" + Str + "</bfit>"));
+		return FText::FromString(TEXT("<bfit>" + Str + "</>"));
 	}
 
 	FORCEINLINE static FText Rm(const FString& Str) {
-		return FText::FromString(TEXT("<rm>" + Str + "</rm>"));
+		return FText::FromString(TEXT("<rm>" + Str + "</>"));
 	}
 
 	FORCEINLINE static FText Red(const FString& Str) {
-		return FText::FromString(TEXT("<red>" + Str + "</red>"));
+		return FText::FromString(TEXT("<red>" + Str + "</>"));
 	}
 
 	FORCEINLINE static FText Green(const FString& Str) {
-		return FText::FromString(TEXT("<green>" + Str + "</green>"));
+		return FText::FromString(TEXT("<green>" + Str + "</>"));
 	}
 };

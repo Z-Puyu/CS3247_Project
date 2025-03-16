@@ -15,15 +15,15 @@ void UHealEffect::OffsetStrength(const double Offset) {
 	this->HealAmount += Offset;
 }
 
-FString UHealEffect::ToString() const {
+FString UHealEffect::ToString_Implementation() const {
 	return FString::Printf(TEXT("Effect: heal %lf"), this->HealAmount);
 }
 
-FText UHealEffect::ToText() const {
+FText UHealEffect::ToText_Implementation() const {
 	return FText::FromString(FString::Printf(TEXT("Heals %d HP"), this->GetHealAmount()));
 }
 
-FText UHealEffect::ToRichText() const {
+FText UHealEffect::ToRichText_Implementation() const {
 	return FText::Format(FTextFormat::FromString(TEXT("Heals {0} HP")),
 		UText::Green(FString::FromInt(this->GetHealAmount())));
 }

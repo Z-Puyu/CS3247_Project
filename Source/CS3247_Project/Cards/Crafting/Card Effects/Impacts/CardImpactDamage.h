@@ -23,9 +23,9 @@ public:
 	
 	virtual UCardEffect* Apply(UCard* OwningCard) override;
 
-	virtual FString ToString() const override;
+	virtual FString ToString_Implementation() const override;
 
-	virtual FText ToText() const override;
+	virtual FText ToText_Implementation() const override;
 
-	virtual FText ToRichText() const override;
+	virtual FText ToRichText_Implementation() const override;
 };

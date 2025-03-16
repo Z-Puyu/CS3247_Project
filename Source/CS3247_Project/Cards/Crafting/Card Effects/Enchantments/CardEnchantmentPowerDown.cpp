@@ -17,13 +17,13 @@ UCardEffect* UCardEnchantmentPowerDown::ComposeTo(UCardEffect* Effect) {
 	return Effect;
 }
 
-FString UCardEnchantmentPowerDown::ToString() const {
+FString UCardEnchantmentPowerDown::ToString_Implementation() const {
 	return FString::Printf(TEXT("%d%% power down"), this->Value);
 }
-FText UCardEnchantmentPowerDown::ToText() const {
+FText UCardEnchantmentPowerDown::ToText_Implementation() const {
 	return FText::FromString(FString::Printf(TEXT("Subsequent effects become %d%% weaker"), this->Value));
 }
-FText UCardEnchantmentPowerDown::ToRichText() const {
+FText UCardEnchantmentPowerDown::ToRichText_Implementation() const {
 	return FText::Format(FTextFormat::FromString(TEXT("Subsequent effects become {0}% weaker")),
 		UText::Red(FString::FromInt(this->Value)));
 }

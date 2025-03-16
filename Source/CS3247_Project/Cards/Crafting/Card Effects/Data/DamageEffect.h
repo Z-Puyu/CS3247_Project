@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class CS3247_PROJECT_API UDamageEffect : public UAtomicCardEffect {
 	GENERATED_BODY()
 
@@ -26,11 +26,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetDamageValue() const { return FMath::CeilToInt(DamageValue); }
 
-	virtual FString ToString() const override;
+	virtual FString ToString_Implementation() const override;
 
-	virtual FText ToText() const override;
+	virtual FText ToText_Implementation() const override;
 	
-	virtual FText ToRichText() const override;
+	virtual FText ToRichText_Implementation() const override;
 
 	virtual void ScaleStrength(const double Ratio) override;
 

@@ -31,7 +31,7 @@ void UEnchantmentDamageEffect::OffsetStrength(const double Offset) {
 	}
 }
 
-FString UEnchantmentDamageEffect::ToString() const {
+FString UEnchantmentDamageEffect::ToString_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	for (auto& Entry : this->EnchantmentDamages) {
 		Sb.Appendf(TEXT("%s enchantment damage: %lf\n"), *Entry.Key.GetTagName().ToString(), Entry.Value);
@@ -40,7 +40,7 @@ FString UEnchantmentDamageEffect::ToString() const {
 	return Sb.ToString();	
 }
 
-FText UEnchantmentDamageEffect::ToText() const {
+FText UEnchantmentDamageEffect::ToText_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};
 	for (auto& Entry : this->EnchantmentDamages) {
@@ -50,7 +50,7 @@ FText UEnchantmentDamageEffect::ToText() const {
 	
 	return FText::FromString(Sb.Join(Lines, '\n').ToString());
 }
-FText UEnchantmentDamageEffect::ToRichText() const {
+FText UEnchantmentDamageEffect::ToRichText_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};
 	for (auto& Entry : this->EnchantmentDamages) {

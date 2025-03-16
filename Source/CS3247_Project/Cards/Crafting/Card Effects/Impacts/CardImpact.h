@@ -15,4 +15,14 @@
 UCLASS(Abstract)
 class CS3247_PROJECT_API UCardImpact : public UCardIngredient {
 	GENERATED_BODY()
+
+public:
+	/**
+	 * Create a new card effect based on the effects of this ingredient.
+	 * @param[in] OwningCard The card that owns this effect.
+	 * @return The new effect.
+	 */
+	virtual UCardEffect* Apply(UCard* OwningCard);
+
+	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
 };

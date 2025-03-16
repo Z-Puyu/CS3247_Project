@@ -5,17 +5,17 @@
 
 #include "../../../../UI/Texts/Text.h"
 
-FString UDamageEffect::ToString() const {
+FString UDamageEffect::ToString_Implementation() const {
 	return FString::Printf(TEXT("%s damage: %lf"),
 		*this->DamageType.GetTagName().ToString(), this->DamageValue);
 }
 
-FText UDamageEffect::ToText() const {
+FText UDamageEffect::ToText_Implementation() const {
 	return FText::Format(FTextFormat::FromString(TEXT("{0} {1} damage")),
 		this->GetDamageValue(), FText::FromString(this->DamageType.ToString()));
 }
 
-FText UDamageEffect::ToRichText() const {
+FText UDamageEffect::ToRichText_Implementation() const {
 	return FText::Format(FTextFormat::FromString(TEXT("{0} {1} damage")),
 		UText::Red(FString::FromInt(this->GetDamageValue())),
 		UText::BfIt(this->DamageType.ToString()));

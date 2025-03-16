@@ -3,4 +3,15 @@
 
 #include "CardEnchantment.h"
 
+#include "../../Nodes/EnchantNode.h"
 
+
+UCardEffect* UCardEnchantment::ComposeTo(UCardEffect* Current) {
+	return Current;
+}
+
+UCardNode* UCardEnchantment::WrapIntoNode(UActorComponent* CardCrafter) {
+	UEnchantNode* Node = NewObject<UEnchantNode>(CardCrafter);
+	Node->Enchantment = this;
+	return Node;
+}

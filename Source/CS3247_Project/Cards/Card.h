@@ -36,9 +36,9 @@ public:
 	
 	UCard();
 	
-	virtual FText ToText() const override;
+	virtual FText ToText_Implementation() const override;
 
-	virtual FText ToRichText() const override;
+	virtual FText ToRichText_Implementation() const override;
 
 	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction = "true"))
 	void GetCardInfo(FText& CardName, FText& Desc, int& UseCost, int& CardDurability, TArray<UCardEffect*>& CardEffects) const;

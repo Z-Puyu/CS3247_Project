@@ -10,7 +10,7 @@ UCard::UCard() {
 	this->Effects = {};
 }
 
-FText UCard::ToText() const {
+FText UCard::ToText_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};
 	for (auto& Effect : this->Effects) {
@@ -20,11 +20,11 @@ FText UCard::ToText() const {
 	return FText::FromString(Sb.Join(Lines, '\n').ToString());
 }
 
-FText UCard::ToRichText() const {
+FText UCard::ToRichText_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};
 	for (auto& Effect : this->Effects) {
-		Lines.Add(Effect.Get()->ToRichText().ToString());
+		Lines.Add(Execute_ToRichText(Effect.Get()).ToString());
 	}
 	
 	return FText::FromString(Sb.Join(Lines, '\n').ToString());
@@ -33,7 +33,7 @@ FText UCard::ToRichText() const {
 void UCard::GetCardInfo(FText& CardName, FText& Desc, int& UseCost, int& CardDurability,
 	TArray<UCardEffect*>& CardEffects) const {
 	CardName = this->Name;
-	Desc = this->ToRichText();
+	Desc = Execute_ToRichText(this);
 	UseCost = this->Cost;
 	CardDurability = this->Durability;
 	CardEffects = this->Effects;

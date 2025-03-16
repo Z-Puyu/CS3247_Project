@@ -16,16 +16,16 @@ UCardEffect* UCardImpactDamage::Apply(UCard* OwningCard) {
 	return Data;
 }
 
-FString UCardImpactDamage::ToString() const {
+FString UCardImpactDamage::ToString_Implementation() const {
 	return FString::Printf(TEXT("%s damage: %d"),
 		*this->DamageType.GetTagName().ToString(), this->Value);
 }
 
-FText UCardImpactDamage::ToText() const {
+FText UCardImpactDamage::ToText_Implementation() const {
 	return FText::Format(FTextFormat::FromString(TEXT("{0} {1} damage")),
 		this->Value, FText::FromString(this->DamageType.ToString()));
 }
-FText UCardImpactDamage::ToRichText() const {
+FText UCardImpactDamage::ToRichText_Implementation() const {
 	return FText::Format(FTextFormat::FromString(TEXT("{0} {1} damage")),
 		UText::Red(FString::FromInt(this->Value)),
 		UText::BfIt(this->DamageType.ToString()));

@@ -7,7 +7,7 @@
 #include "Printable.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, MinimalAPI)
+UINTERFACE(Blueprintable, BlueprintType, MinimalAPI)
 class UPrintable : public UInterface {
 	GENERATED_BODY()
 };
@@ -21,6 +21,8 @@ class CS3247_PROJECT_API IPrintable {
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintCallable)
-	virtual FString ToString() const = 0;
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Text Conversion")
+	FString ToString() const;
+
+	virtual FString ToString_Implementation() const { return TEXT(""); }
 };
