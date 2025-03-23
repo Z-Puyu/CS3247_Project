@@ -21,7 +21,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, meta=(Categories="Damage"))
 	int32 Value;
 	
-	virtual UCardEffect* Apply(UCard* OwningCard) override;
+	virtual TArray<UCardEffect*> Apply(UCard* OwningCard) override;
 
 	virtual FString ToString_Implementation() const override;
 

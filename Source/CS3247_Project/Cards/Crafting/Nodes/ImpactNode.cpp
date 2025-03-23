@@ -5,6 +5,6 @@
 
 #include "../Card Effects/Impacts/CardImpact.h"
 
-TArray<TObjectPtr<UCardEffect>> UImpactNode::Build(UCard* OwningCard) {
-	return {this->Impact.Get()->Apply(OwningCard)};
+TArray<UCardEffect*> UImpactNode::Build(UCard& OwningCard, double& ModifierPower) {
+	return this->Impact.Get()->Apply(&OwningCard);
 }

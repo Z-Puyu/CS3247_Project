@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "../../../UI/Texts/Localisable.h"
 #include "../../../UI/Texts/Printable.h"
+#include "../../../Cards/Card.h"
 #include "Engine/DataAsset.h"
 #include "CardIngredient.generated.h"
 
@@ -34,9 +35,12 @@ public:
 	double UseCost;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
+	double DurabilityDegradation;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
 	int32 CraftCost;
 
-	UCardIngredient() : Id(FGuid::NewGuid()), UseCost(0), CraftCost(0) {}
+	UCardIngredient() : Id(FGuid::NewGuid()), UseCost(0), DurabilityDegradation(0), CraftCost(0) {}
 
 	UFUNCTION(BlueprintCallable)
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter);
@@ -46,4 +50,6 @@ public:
 	virtual FText ToText_Implementation() const override;
 
 	virtual FText ToRichText_Implementation() const override;
+protected:
+	FORCEINLINE void AddCost(UCard& OwningCard) const { OwningCard.Cost += this->UseCost; }
 };

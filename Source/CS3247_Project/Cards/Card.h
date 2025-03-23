@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "../UI/Texts/Localisable.h"
+#include "Crafting/Card Effects/Data/CardEffect.h"
 #include "Card.generated.h"
 
+struct FRecipeEdge;
+class UCardIngredient;
 class ILocalisable;
 class UCardRecipe;
 class UCardEffect;
@@ -14,24 +17,24 @@ class UCardEffect;
 /**
  * 
  */
-UCLASS(BlueprintType, Blueprintable)
+UCLASS(BlueprintType, Blueprintable, DefaultToInstanced, EditInlineNew)
 class CS3247_PROJECT_API UCard : public UObject, public ILocalisable {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(ExposeOnSpawn))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText Name;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(ExposeOnSpawn))
-	int Cost;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	double Cost;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(ExposeOnSpawn))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int Durability;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn))
-	TArray<TObjectPtr<UCardEffect>> Effects;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Instanced)
+	TArray<UCardEffect*> Effects;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(ExposeOnSpawn))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<UCardRecipe> Recipe;
 	
 	UCard();
@@ -45,8 +48,25 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Card Info")
 	FORCEINLINE void GetCardData(int& UseCost, int& CardDurability, TArray<UCardEffect*>& CardEffects) const {
-		UseCost = this->Cost;
+		UseCost = FMath::Floor(this->Cost);
 		CardDurability = this->Durability;
 		CardEffects = this->Effects;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool IsHostile() const {
+		return this->Effects.ContainsByPredicate([](const UCardEffect* E) -> bool { return E->IsHostile(); });
+	}
+
+	FORCEINLINE bool operator==(const UCard& Other) const {
+		return this->Recipe == Other.Recipe;
+	}
+	
+	FORCEINLINE bool operator!=(const UCard& Other) const {
+		return this->Recipe != Other.Recipe;
+	}
+	
+	FORCEINLINE friend uint32 GetTypeHash(const UCard& Card) {
+		return GetTypeHash(Card.Recipe);
 	}
 };

@@ -15,10 +15,12 @@ class CS3247_PROJECT_API UImpactNode : public UCardNode {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UCardImpact> Impact;
 
-	virtual TArray<TObjectPtr<UCardEffect>> Build(UCard* OwningCard) override;
+	FORCEINLINE virtual FIngredientKey Unpack() const override { return FIngredientKey(this->Impact, this->Id); }
+
+	virtual TArray<UCardEffect*> Build(UCard& OwningCard, double& ModifierPower) override;
 
 	FORCEINLINE virtual FString ToString_Implementation() const override { return TEXT("[" + this->Impact->GetName() + "]"); }
 };

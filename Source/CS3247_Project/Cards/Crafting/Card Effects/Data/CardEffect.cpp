@@ -3,6 +3,14 @@
 
 #include "CardEffect.h"
 
+#include "DamageEffect.h"
+#include "EnchantmentDamageEffect.h"
+
+bool UCardEffect::IsHostile() const {
+	return this->AtomicEffects.Contains(UDamageEffect::StaticClass()) ||
+		this->AtomicEffects.Contains(UEnchantmentDamageEffect::StaticClass());
+}
+
 FString UCardEffect::ToString_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};

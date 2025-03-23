@@ -10,14 +10,14 @@
  * 
  */
 UCLASS()
-class CS3247_PROJECT_API UIngredientBrancher : public UIngredientMixer {
+class CS3247_PROJECT_API UIngredientBrancher : public UCardIngredient {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditDefaultsOnly)
 	int32 EnchantmentPowerDecay;
-	
-	void Merge(TArray<TObjectPtr<UCardEffect>>& Base, const TArray<TObjectPtr<UCardEffect>> Others) const;
+
+	void Merge(UCard* OwningCard, TArray<UCardEffect*>& LeftEffects, const TArray<UCardEffect*>& RightEffects) const;
 
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
 };

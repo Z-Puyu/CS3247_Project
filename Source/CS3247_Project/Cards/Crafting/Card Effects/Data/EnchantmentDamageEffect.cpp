@@ -4,6 +4,9 @@
 #include "EnchantmentDamageEffect.h"
 
 #include "../../../../UI/Texts/Text.h"
+#include "../../../../Common/DataManager.h"
+#include "../../../../Common/BasicGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 void UEnchantmentDamageEffect::ScaleStrength(const FGameplayTag DmgType, const double Ratio) {
 	if (this->EnchantmentDamages.Contains(DmgType)) {
@@ -51,12 +54,13 @@ FText UEnchantmentDamageEffect::ToText_Implementation() const {
 	return FText::FromString(Sb.Join(Lines, '\n').ToString());
 }
 FText UEnchantmentDamageEffect::ToRichText_Implementation() const {
+	const UBasicGameInstance* GameInstance = Cast<UBasicGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};
 	for (auto& Entry : this->EnchantmentDamages) {
 		Lines.Add(FText::Format(FTextFormat::FromString("{0} {1} damage"),
 			UText::Red(FString::FromInt(FMath::CeilToInt32(Entry.Value))),
-			UText::BfIt(Entry.Key.GetTagName().ToString())).ToString());
+			UText::BfIt(IDataManager::Execute_GetName(GameInstance, Entry.Key).ToString())).ToString());
 	}
 
 	return FText::FromString(Sb.Join(Lines, '\n').ToString());

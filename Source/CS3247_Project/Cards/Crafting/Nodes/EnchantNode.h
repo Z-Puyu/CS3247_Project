@@ -17,8 +17,10 @@ class CS3247_PROJECT_API UEnchantNode : public UCardNode {
 public:
 	UPROPERTY()
 	TObjectPtr<UCardEnchantment> Enchantment;
+
+	FORCEINLINE virtual FIngredientKey Unpack() const override { return FIngredientKey(this->Enchantment, this->Id); }
 	
-	virtual TArray<TObjectPtr<UCardEffect>> Build(UCard* OwningCard) override;
+	virtual TArray<UCardEffect*> Build(UCard& OwningCard, double& ModifierPower) override;
 
 	FORCEINLINE virtual FString ToString_Implementation() const override { return TEXT("[" + this->Enchantment->GetName() + "]"); }
 };

@@ -25,7 +25,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int Strength;
 	
-	virtual UCardEffect* ComposeTo(UCardEffect* Effect) override;
+	virtual UCardEffect* ComposeTo(UCard* OwningCard, UCardEffect* Effect, double Multiplier) override;
 
 	virtual FString ToString_Implementation() const override;
 

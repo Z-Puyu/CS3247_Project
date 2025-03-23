@@ -19,7 +19,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Modifier")
 	int Value;
 	
-	virtual UCardEffect* ComposeTo(UCardEffect* Effect) override;
+	virtual UCardEffect* ComposeTo(UCard* OwningCard, UCardEffect* Effect, double Multiplier) override;
 
 	virtual FString ToString_Implementation() const override;
 

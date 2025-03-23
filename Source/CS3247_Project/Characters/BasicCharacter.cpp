@@ -3,6 +3,8 @@
 
 #include "BasicCharacter.h"
 
+#include "CS3247_Project/GameplayAbilities/AttributeSet/PlayerAttributeSet.h"
+
 
 // Sets default values
 ABasicCharacter::ABasicCharacter() {
@@ -14,7 +16,48 @@ ABasicCharacter::ABasicCharacter() {
 // Called when the game starts or when spawned
 void ABasicCharacter::BeginPlay() {
 	Super::BeginPlay();
+}
+
+void ABasicCharacter::SignalAttributeChange(const FGameplayAttribute& Attribute) const {
+	return;
+}
+
+void ABasicCharacter::SignalAllAttributeUpdates() const {
+	TArray<FGameplayAttribute> Attributes = {};
+	this->GetAbilitySystemComponent()->GetAllAttributes(Attributes);
+	for (auto& Attribute : Attributes) {
+		this->SignalAttributeChange(Attribute);
+	}
+}
+
+TMap<FGameplayAttribute, float> ABasicCharacter::SaveAttributes() const {
+	TMap<FGameplayAttribute, float> SaveData = {};
+	TArray<FGameplayAttribute> Attributes = {};
+	this->GetAbilitySystemComponent()->GetAllAttributes(Attributes);
+    for (FGameplayAttribute Attribute : Attributes) {
+    	float Value = this->GetAbilitySystemComponent()->GetNumericAttribute(Attribute);
+        SaveData.Add(Attribute, Value);
+    	FString AttributeName = Attribute.GetName();
+    	UE_LOG(LogTemp, Display, TEXT("Saved attribute: %s, Value: %f"), *AttributeName, Value);
+    }
 	
+    return SaveData;
+	
+}
+void ABasicCharacter::LoadAttributes(TMap<FGameplayAttribute, float> InAttributes) const {
+	for (auto& Entry : InAttributes) {
+		this->GetAbilitySystemComponent()
+			->ApplyModToAttribute(Entry.Key, EGameplayModOp::Override, Entry.Value);
+	}
+
+	// Twice because we want the clamping to work properly.
+	// Obviously there are smarter ways to do it, but I lazy.
+	for (auto& Entry : InAttributes) {
+		FString AttributeName = Entry.Key.GetName();
+		UE_LOG(LogTemp, Display, TEXT("Load attribute: %s, Value: %f"), *AttributeName, Entry.Value);
+		this->GetAbilitySystemComponent()
+			->ApplyModToAttribute(Entry.Key, EGameplayModOp::Override, Entry.Value);
+	}
 }
 
 // Called every frame

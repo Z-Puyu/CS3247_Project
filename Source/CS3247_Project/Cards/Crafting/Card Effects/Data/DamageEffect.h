@@ -11,14 +11,15 @@
 /**
  * 
  */
-UCLASS(BlueprintType)
+UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
 class CS3247_PROJECT_API UDamageEffect : public UAtomicCardEffect {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FGameplayTag DamageType;
-	
+
+	UPROPERTY(EditAnywhere)
 	double DamageValue;
 	
 	UDamageEffect() : DamageValue(0) {}

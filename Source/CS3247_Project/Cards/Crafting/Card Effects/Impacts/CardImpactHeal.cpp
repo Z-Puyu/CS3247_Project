@@ -7,12 +7,15 @@
 #include "../Data/CardEffect.h"
 #include "../Data/HealEffect.h"
 
-UCardEffect* UCardImpactHeal::Apply(UCard* OwningCard) {
-	UCardEffect* Data = Super::Apply(OwningCard);
-	UHealEffect* Heal = NewObject<UHealEffect>(Data);
-	Heal->HealAmount = this->Value;
-	Data->SetEffect(UHealEffect::StaticClass(), Heal);
-	return Data;
+TArray<UCardEffect*> UCardImpactHeal::Apply(UCard* OwningCard) {
+	TArray<UCardEffect*> Effects = Super::Apply(OwningCard);
+	for (const auto& Data : Effects) {
+		UHealEffect* Heal = NewObject<UHealEffect>(Data);
+		Heal->HealAmount = this->Value;
+		Data->SetEffect(UHealEffect::StaticClass(), Heal);
+	}
+	
+	return Effects;
 }
 
 FString UCardImpactHeal::ToString_Implementation() const {

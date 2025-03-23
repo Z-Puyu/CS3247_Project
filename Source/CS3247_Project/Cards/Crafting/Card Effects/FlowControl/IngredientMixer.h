@@ -19,10 +19,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int ModifierEffect;
 	
-	UCardImpact* Combine(const UCardImpact* Left, const UCardImpact* Right);
+	UCardImpact* Combine(UCard* OwningCard, const UCardImpact* Left, const UCardImpact* Right);
 
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
 private:
 	UPROPERTY(EditDefaultsOnly)
-	TMap<FReactantKey, TObjectPtr<UCardImpact>> Combinations;
+	TMap<FReactantKey, UCardImpact*> Combinations;
 };

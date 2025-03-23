@@ -19,7 +19,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(Categories = "SpecialCardEffect"))
 	FGameplayTag SpecialEffect;
 
-	virtual UCardEffect* ComposeTo(UCardEffect* Effect) override;
+	virtual UCardEffect* ComposeTo(UCard* OwningCard, UCardEffect* Effect, double Multiplier) override;
 
 	virtual FString ToString_Implementation() const override;
 

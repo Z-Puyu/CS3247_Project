@@ -14,6 +14,7 @@ class CS3247_PROJECT_API UHealEffect : public UAtomicCardEffect {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere)
 	double HealAmount;
 
 	UHealEffect() : HealAmount(0) {}

@@ -82,7 +82,37 @@ void UCardNode::BreakAllLinks() {
 	}
 }
 
-TArray<TObjectPtr<UCardEffect>> UCardNode::Build(UCard* OwningCard) {
+TArray<UCardEffect*> UCardNode::Build(UCard& OwningCard, double& ModifierPower) {
 	return {};
 }
 
+TArray<UCardNode*> UCardNode::GetSuccessors() const {
+	if (this->FirstSuccessor && this->SecondSuccessor) {
+		return { this->FirstSuccessor, this->SecondSuccessor };
+	}
+
+	if (this->FirstSuccessor) {
+		return { this->FirstSuccessor };
+	}
+
+	if (this->SecondSuccessor) {
+		return { this->SecondSuccessor };
+	}
+		
+	return {};
+}
+
+bool UCardNode::operator==(const UCardNode& Other) const {
+	return this->Unpack() == Other.Unpack() &&
+		(this->FirstSuccessor == Other.FirstSuccessor && this->SecondSuccessor == Other.SecondSuccessor) ||
+		(this->FirstSuccessor == Other.SecondSuccessor && this->SecondSuccessor == Other.FirstSuccessor);
+}
+
+int32 GetTypeHash(const UCardNode& Node) {
+	const int32 FirstSuccessorHash = Node.FirstSuccessor ? GetTypeHash(Node.FirstSuccessor) : 0;
+	const int32 SecondSuccessorHash = Node.SecondSuccessor ? GetTypeHash(Node.SecondSuccessor) : 0;
+	const int32 SuccessorHash = FirstSuccessorHash < SecondSuccessorHash
+		? HashCombine(FirstSuccessorHash, SecondSuccessorHash)
+		: HashCombine(SecondSuccessorHash, FirstSuccessorHash);
+	return HashCombine(GetTypeHash(Node.Unpack()), SuccessorHash);
+}

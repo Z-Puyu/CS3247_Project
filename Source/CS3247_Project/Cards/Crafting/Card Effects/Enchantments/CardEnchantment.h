@@ -15,10 +15,12 @@ class CS3247_PROJECT_API UCardEnchantment : public UCardIngredient {
 public:
 	/**
 	 * Modify an existing card effect based on the effects of this ingredient.
-	 * @param Current The current effect. 
+	 * @param OwningCard The card this enchantment is applied to.
+	 * @param Current The current effect.
+	 * @param Multiplier The multiplier of the enchantment.
 	 * @return The new effect.
 	 */
-	virtual UCardEffect* ComposeTo(UCardEffect* Current);
+	virtual UCardEffect* ComposeTo(UCard* OwningCard, UCardEffect* Current, double Multiplier);
 
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
 };

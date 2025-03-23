@@ -4,6 +4,9 @@
 #include "DamageEffect.h"
 
 #include "../../../../UI/Texts/Text.h"
+#include "../../../../Common/DataManager.h"
+#include "../../../../Common/BasicGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 FString UDamageEffect::ToString_Implementation() const {
 	return FString::Printf(TEXT("%s damage: %lf"),
@@ -16,9 +19,10 @@ FText UDamageEffect::ToText_Implementation() const {
 }
 
 FText UDamageEffect::ToRichText_Implementation() const {
+	const UBasicGameInstance* GameInstance = Cast<UBasicGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	return FText::Format(FTextFormat::FromString(TEXT("{0} {1} damage")),
 		UText::Red(FString::FromInt(this->GetDamageValue())),
-		UText::BfIt(this->DamageType.ToString()));
+		UText::BfIt(IDataManager::Execute_GetName(GameInstance, this->DamageType).ToString()));
 }
 
 void UDamageEffect::ScaleStrength(const double Ratio) {

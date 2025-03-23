@@ -17,7 +17,9 @@ public:
 	UPROPERTY()
 	TObjectPtr<UIngredientBrancher> Brancher;
 
-	virtual TArray<TObjectPtr<UCardEffect>> Build(UCard* OwningCard) override;
+	FORCEINLINE virtual FIngredientKey Unpack() const override { return FIngredientKey(this->Brancher, this->Id); }
+
+	virtual TArray<UCardEffect*> Build(UCard& OwningCard, double& ModifierPower) override;
 
 	FORCEINLINE virtual FString ToString_Implementation() const override { return TEXT("[" + this->Brancher->GetName() + "]"); }
 };

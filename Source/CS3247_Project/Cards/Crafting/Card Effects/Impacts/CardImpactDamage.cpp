@@ -7,13 +7,16 @@
 #include "../Data/DamageEffect.h"
 #include "../../../../UI/Texts/Text.h"
 
-UCardEffect* UCardImpactDamage::Apply(UCard* OwningCard) {
-	UCardEffect* Data = Super::Apply(OwningCard);
-	UDamageEffect* Dmg = NewObject<UDamageEffect>(Data);
-	Dmg->DamageType = this->DamageType;
-	Dmg->DamageValue = this->Value;
-	Data->SetEffect(UDamageEffect::StaticClass(), Dmg);
-	return Data;
+TArray<UCardEffect*> UCardImpactDamage::Apply(UCard* OwningCard) {
+	TArray<UCardEffect*> Effects = Super::Apply(OwningCard);
+	for (const auto& Data : Effects) {
+		UDamageEffect* Dmg = NewObject<UDamageEffect>(Data);
+		Dmg->DamageType = this->DamageType;
+		Dmg->DamageValue = this->Value;
+		Data->SetEffect(UDamageEffect::StaticClass(), Dmg);
+	}
+	
+	return Effects;
 }
 
 FString UCardImpactDamage::ToString_Implementation() const {

@@ -20,9 +20,9 @@ public:
 	/**
 	 * Create a new card effect based on the effects of this ingredient.
 	 * @param[in] OwningCard The card that owns this effect.
-	 * @return The new effect.
+	 * @return The new effects.
 	 */
-	virtual UCardEffect* Apply(UCard* OwningCard);
+	virtual TArray<UCardEffect*> Apply(UCard* OwningCard);
 
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
 };

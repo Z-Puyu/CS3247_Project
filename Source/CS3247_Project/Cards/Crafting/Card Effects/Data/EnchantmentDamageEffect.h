@@ -18,8 +18,14 @@ class CS3247_PROJECT_API UEnchantmentDamageEffect : public UAtomicCardEffect {
 public:
 	UEnchantmentDamageEffect() : EnchantmentDamages({}) {}
 
-	FORCEINLINE double Get(const FGameplayTag DmgType) const {
-		return this->EnchantmentDamages.Contains(DmgType) ? this->EnchantmentDamages[DmgType] : 0;
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void AllDamageTypes(TArray<FGameplayTag>& DamageTypes) const {
+		this->EnchantmentDamages.GetKeys(DamageTypes);
+	}
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE int32 Get(const FGameplayTag DmgType) const {
+		return this->EnchantmentDamages.Contains(DmgType) ? FMath::CeilToInt32(this->EnchantmentDamages[DmgType]) : 0;
 	}
 
 	FORCEINLINE void Set(const FGameplayTag DmgType, const double DmgVal) {

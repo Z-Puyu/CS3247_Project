@@ -14,7 +14,7 @@ FText UCard::ToText_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};
 	for (auto& Effect : this->Effects) {
-		Lines.Add(Effect.Get()->ToText().ToString());
+		Lines.Add(Effect->ToText().ToString());
 	}
 	
 	return FText::FromString(Sb.Join(Lines, '\n').ToString());
@@ -24,7 +24,7 @@ FText UCard::ToRichText_Implementation() const {
 	TStringBuilder<256> Sb = TStringBuilder<256>();
 	TArray<FString> Lines = {};
 	for (auto& Effect : this->Effects) {
-		Lines.Add(Execute_ToRichText(Effect.Get()).ToString());
+		Lines.Add(Execute_ToRichText(Effect).ToString());
 	}
 	
 	return FText::FromString(Sb.Join(Lines, '\n').ToString());

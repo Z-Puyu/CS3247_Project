@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS(Abstract)
+UCLASS(Abstract, BlueprintType, DefaultToInstanced, EditInlineNew)
 class CS3247_PROJECT_API UAtomicCardEffect : public UObject, public ILocalisable, public IPrintable {
 	GENERATED_BODY()
 
