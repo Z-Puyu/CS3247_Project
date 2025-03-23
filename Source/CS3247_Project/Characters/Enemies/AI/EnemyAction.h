@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Characters/Enemy/EnemyActions.h"
+#include "EnemyMove.h"
 #include "UObject/Object.h"
 #include "EnemyAction.generated.h"
 
@@ -12,14 +12,14 @@ struct FAiDecisionContext;
  * 
  */
 UCLASS(Abstract, BlueprintType, Blueprintable, DefaultToInstanced, EditInlineNew)
-class CS3247_PROJECT_API UEnemyAction : public UObject {
+class CS3247_PROJECT_API UEnemyAction : public UDataAsset {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
-	EEnemyActions ActionName;
+	EEnemyMove ActionName;
 	
-	UEnemyAction() : ActionName(EEnemyActions::Attack), RandomnessAllowance(0.1f) {};
+	UEnemyAction() : ActionName(EEnemyMove::Attack), RandomnessAllowance(0.1f) {};
 	
 	virtual float Evaluate(const FAiDecisionContext Context) const;
 

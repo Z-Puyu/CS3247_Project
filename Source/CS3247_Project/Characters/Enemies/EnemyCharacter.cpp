@@ -3,8 +3,7 @@
 
 #include "EnemyCharacter.h"
 
-#include "../GameplayAbilities/AttributeSet/BasicAttributeSet.h"
-#include "Characters/Enemy/EnemyActions.h"
+#include "../../GameplayAbilities/AttributeSet/BasicAttributeSet.h"
 
 
 // Sets default values

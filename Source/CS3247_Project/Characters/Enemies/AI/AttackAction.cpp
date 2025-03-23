@@ -4,10 +4,10 @@
 #include "AttackAction.h"
 
 #include "AiDecisionContext.h"
-#include "../Characters/Enemies/Enemy.h"
-#include "../Characters/Enemies/EnemyCharacter.h"
-#include "../Characters/Player/PlayerCharacter.h"
-#include "../Common/BasicGameInstance.h"
+#include "../Enemy.h"
+#include "../EnemyCharacter.h"
+#include "../../Player/PlayerCharacter.h"
+#include "../../../Common/BasicGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 float UAttackAction::Evaluate(const FAiDecisionContext Context) const {

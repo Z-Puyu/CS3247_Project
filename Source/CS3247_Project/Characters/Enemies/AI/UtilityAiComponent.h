@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Characters/Enemy/EnemyActions.h"
+#include "EnemyMove.h"
 #include "Components/ActorComponent.h"
 #include "UtilityAiComponent.generated.h"
 
 
-struct FAiDecisionContext;
 class UEnemyAction;
+struct FAiDecisionContext;
+class UEnemyActionType;
 
 UCLASS(BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CS3247_PROJECT_API UUtilityAiComponent : public UActorComponent {
@@ -28,7 +29,7 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	EEnemyActions Decide(const FAiDecisionContext& Context) const;
+	EEnemyMove Decide(const FAiDecisionContext& Context) const;
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,

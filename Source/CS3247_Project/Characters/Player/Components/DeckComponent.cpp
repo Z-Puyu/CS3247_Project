@@ -10,7 +10,7 @@ UDeckComponent::UDeckComponent() {
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	this->Deck = {};
-	this->DefaultCards = {};
+	this->InitialCards = {};
 	// ...
 }
 
@@ -35,7 +35,7 @@ UCard* UDeckComponent::RandomDraw() {
 		return Card;
 	}
 	
-	return this->DefaultCards[FMath::RandRange(0, this->DefaultCards.Num() - 1)];
+	return this->InitialCards[FMath::RandRange(0, this->InitialCards.Num() - 1)];
 }
 
 

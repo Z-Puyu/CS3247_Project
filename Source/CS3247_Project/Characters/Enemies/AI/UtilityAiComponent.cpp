@@ -2,7 +2,6 @@
 
 
 #include "UtilityAiComponent.h"
-
 #include "AiDecisionContext.h"
 #include "EnemyAction.h"
 
@@ -25,7 +24,7 @@ void UUtilityAiComponent::BeginPlay() {
 	
 }
 
-EEnemyActions UUtilityAiComponent::Decide(const FAiDecisionContext& Context) const {
+EEnemyMove UUtilityAiComponent::Decide(const FAiDecisionContext& Context) const {
 	TArray<float> Scores = {};
 	for (auto& Action : this->StrategySpace) {
 		float Score = Action->Evaluate(Context);

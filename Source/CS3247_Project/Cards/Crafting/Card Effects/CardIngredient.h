@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "../../../UI/Texts/Localisable.h"
 #include "../../../UI/Texts/Printable.h"
-#include "../../../Cards/Card.h"
+#include "../../Card.h"
+#include "../../../Common/GameItem.h"
 #include "Engine/DataAsset.h"
 #include "CardIngredient.generated.h"
 
@@ -16,7 +17,7 @@ class UCardEffect;
  * The abstract base class for all card ingredients in crafting.
  */
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class CS3247_PROJECT_API UCardIngredient : public UDataAsset, public IPrintable, public ILocalisable {
+class CS3247_PROJECT_API UCardIngredient : public UGameItem, public IPrintable, public ILocalisable {
 	GENERATED_BODY()
 	
 public:
@@ -38,9 +39,11 @@ public:
 	double DurabilityDegradation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
-	int32 CraftCost;
+	TMap<EGameItemTag, int32> CraftCost;
 
-	UCardIngredient() : Id(FGuid::NewGuid()), UseCost(0), DurabilityDegradation(0), CraftCost(0) {}
+	UCardIngredient() : Super(EGameItemTag::CardIngredient),
+		Id(FGuid::NewGuid()), UseCost(0), DurabilityDegradation(0), CraftCost({
+			{EGameItemTag::SoulFragment, 0}}) {}
 
 	UFUNCTION(BlueprintCallable)
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter);

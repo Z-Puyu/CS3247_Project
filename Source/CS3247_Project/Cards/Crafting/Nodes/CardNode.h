@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS(Abstract, BlueprintType, DefaultToInstanced, EditInlineNew)
+UCLASS(Abstract, BlueprintType)
 class CS3247_PROJECT_API UCardNode : public UDataAsset, public IPrintable, public ILocalisable {
 	GENERATED_BODY()
 

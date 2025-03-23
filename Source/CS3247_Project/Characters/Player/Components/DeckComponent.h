@@ -22,10 +22,10 @@ protected:
 	TArray<UCard*> Deck;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Deck", meta = (AllowPrivateAccess = "true"))
-	TArray<UCard*> DefaultCards;
+	TArray<UCard*> InitialCards;
 
-	UPROPERTY(Instanced, EditAnywhere, BlueprintReadOnly, Category = "Deck", meta = (AllowPrivateAccess = "true"))
-	TArray<UCardRecipe*> DefaultRecipes;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deck", DisplayName = "Initial Recipes", meta = (AllowPrivateAccess = "true"))
+	TArray<TObjectPtr<UCardRecipe>> TestRecipes;
 	
 	// Called when the game starts
 	virtual void BeginPlay() override;

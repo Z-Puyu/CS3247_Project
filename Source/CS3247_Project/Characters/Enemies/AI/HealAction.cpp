@@ -3,8 +3,8 @@
 
 #include "HealAction.h"
 #include "AiDecisionContext.h"
-#include "../Characters/Enemies/EnemyCharacter.h"
-#include "../GameplayAbilities/AttributeSet/BasicAttributeSet.h"
+#include "../EnemyCharacter.h"
+#include "../../../GameplayAbilities/AttributeSet/BasicAttributeSet.h"
 
 float UHealAction::Evaluate(const FAiDecisionContext Context) const {
 	const AEnemyCharacter* Self = Context.SelfData;

@@ -3,8 +3,8 @@
 
 #include "GuardAction.h"
 #include "AiDecisionContext.h"
-#include "../Characters/Enemies/EnemyCharacter.h"
-#include "../GameplayAbilities/AttributeSet/BasicAttributeSet.h"
+#include "../EnemyCharacter.h"
+#include "../../../GameplayAbilities/AttributeSet/BasicAttributeSet.h"
 
 float UGuardAction::Evaluate(const FAiDecisionContext Context) const {
 	const AEnemyCharacter* Self = Context.SelfData;

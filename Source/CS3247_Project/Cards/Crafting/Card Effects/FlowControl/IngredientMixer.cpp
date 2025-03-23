@@ -17,8 +17,8 @@ UCardImpact* UIngredientMixer::Combine(UCard* OwningCard, const UCardImpact* Lef
 	}
 
 	// Otherwise, each cost is worth one possible raw power.
-	const int32 LeftCost = Left->CraftCost;
-	const int32 RightCost = Right->CraftCost;
+	const int32 LeftCost = Left->CraftCost[EGameItemTag::SoulFragment];
+	const int32 RightCost = Right->CraftCost[EGameItemTag::SoulFragment];
 	const int32 AvgCost = (LeftCost + RightCost) / 2;
 	const int32 RawPower = FMath::RandRange(AvgCost, FMath::Max(LeftCost, RightCost));
 	UCardImpactRawPower* RawPowerImpact = NewObject<UCardImpactRawPower>();

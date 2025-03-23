@@ -8,6 +8,8 @@
 #include "Engine/DataAsset.h"
 #include "Enemy.generated.h"
 
+struct FLoot;
+class UGameItem;
 struct FGameplayAttribute;
 /**
  * 
@@ -33,8 +35,8 @@ public:
 	int32 Defence;
 
 	/**
-	 * Unimplemented yet.
+	 * Loots that this enemy can drop. The vector2 is the min and max amount of the loot.
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<UObject*> PossibleLoots;
+	TArray<FLoot> PossibleLoots;
 };
