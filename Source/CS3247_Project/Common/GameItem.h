@@ -21,4 +21,13 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	EGameItemTag ItemType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
+	FText Name;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
+	FText Desc;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
+	TSoftObjectPtr<UTexture2D> Icon;
 };

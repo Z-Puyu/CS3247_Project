@@ -17,12 +17,12 @@
  * - Enchantment Damage
  * - Special Effects
  */
-UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
+UCLASS(BlueprintType)
 class CS3247_PROJECT_API UCardEffect : public UObject, public IPrintable, public ILocalisable {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	TMap<TSubclassOf<UAtomicCardEffect>, UAtomicCardEffect*> AtomicEffects;
 	
 	UCardEffect() : AtomicEffects({}) {}

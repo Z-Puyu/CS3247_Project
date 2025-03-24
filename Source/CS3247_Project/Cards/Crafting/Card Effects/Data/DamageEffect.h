@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS(BlueprintType, DefaultToInstanced, EditInlineNew)
+UCLASS(BlueprintType)
 class CS3247_PROJECT_API UDamageEffect : public UAtomicCardEffect {
 	GENERATED_BODY()
 

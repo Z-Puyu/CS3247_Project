@@ -23,15 +23,6 @@ class CS3247_PROJECT_API UCardIngredient : public UGameItem, public IPrintable, 
 public:
 	__readonly FGuid Id;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
-	FText Name;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
-	FText Desc;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Basic Info")
-	TSoftObjectPtr<UTexture2D> Icon;
-	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
 	double UseCost;
 
