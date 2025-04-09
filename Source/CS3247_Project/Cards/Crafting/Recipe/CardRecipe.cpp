@@ -7,9 +7,17 @@
 #include "../Nodes/CardNode.h"
 #include "../../Card.h"
 #include "../../../Characters/Player/Components/DeckComponent.h"
+#include "../Card Effects/Impacts/CardImpact.h"
+#include "../Nodes/MixerNode.h"
 
-UCard* UCardRecipe::Forge(UDeckComponent* PlayerDeckComponent) const {
+TMap<UResource*, int32> UCardRecipe::GetCosts() const {
+	return this->Source->GetSubtreeCost();
+}
+
+UCard* UCardRecipe::Forge(UDeckComponent* PlayerDeckComponent, const bool bIsDefault) {
 	UCard* Card = NewObject<UCard>(PlayerDeckComponent);
+	Card->bIsDefault = bIsDefault;
+	Card->Recipe = this;
 	double ModifierPower = 1.0;
 	Card->Effects = this->Source.Get()->Build(*Card, ModifierPower);
 	return Card;
@@ -19,11 +27,13 @@ TArray<FRecipeEdge> UCardRecipe::ToEdgeList() {
 	if (!this->Edges.IsEmpty()) {
 		return this->Edges;
 	}
-	
+
+	const FIngredientKey RootIngredient = this->Source->Unpack();
+	this->Edges.Add(FRecipeEdge(RootIngredient, RootIngredient));
 	TQueue<UCardNode*> Queue = {};
 	Queue.Enqueue(this->Source);
 	UCardNode* Curr;
-	while (!Queue.Dequeue(Curr)) {
+	while (Queue.Dequeue(Curr)) {
 		const FIngredientKey IngredientKey = Curr->Unpack();
 
 		for (auto& Successor : Curr->GetSuccessors()) {
@@ -33,6 +43,31 @@ TArray<FRecipeEdge> UCardRecipe::ToEdgeList() {
 	}
 	
 	return this->Edges;
+}
+
+TArray<UCardImpact*> UCardRecipe::FetchImpacts() const {
+	TArray<UCardImpact*> Impacts = {};
+	TQueue<UCardNode*> Queue = {};
+	Queue.Enqueue(this->Source);
+	// return {Cast<UCardImpact>(this->Source->Unpack().Ingredient)};
+	UCardNode* Curr;
+	while (Queue.Dequeue(Curr)) {
+		if (Curr->IsA(UMixerNode::StaticClass())) {
+			Impacts.Add(Cast<UMixerNode>(Curr)->Impact);
+			continue;
+		}
+		
+		const auto [Ingredient, _] = Curr->Unpack();
+		if (Ingredient.IsA(UCardImpact::StaticClass())) {
+			Impacts.Add(Cast<UCardImpact>(Ingredient));
+		}
+		
+		for (auto& Successor : Curr->GetSuccessors()) {
+			Queue.Enqueue(Successor);
+		}
+	}
+
+	return Impacts;
 }
 
 FText UCardRecipe::ToText_Implementation() const {

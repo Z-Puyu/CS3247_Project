@@ -11,7 +11,7 @@ class UCardImpact;
 /**
  * 
  */
-UCLASS(Abstract)
+UCLASS()
 class CS3247_PROJECT_API UIngredientMixer : public UCardIngredient {
 	GENERATED_BODY()
 
@@ -19,10 +19,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int ModifierEffect;
 	
-	UCardImpact* Combine(const UCardImpact* Left, const UCardImpact* Right);
+	UCardImpact* Combine(UCardImpact* Left, UCardImpact* Right) const;
 
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
 private:
 	UPROPERTY(EditDefaultsOnly)
-	TMap<FReactantKey, UCardImpact*> Combinations;
+	TSoftObjectPtr<UDataTable> Combinations;
 };

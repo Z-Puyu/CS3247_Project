@@ -10,13 +10,14 @@
 #include "Engine/DataAsset.h"
 #include "CardIngredient.generated.h"
 
+class UResource;
 class UCardNode;
 class UCard;
 class UCardEffect;
 /**
  * The abstract base class for all card ingredients in crafting.
  */
-UCLASS(Abstract, BlueprintType, Blueprintable)
+UCLASS(Abstract, BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
 class CS3247_PROJECT_API UCardIngredient : public UGameItem, public IPrintable, public ILocalisable {
 	GENERATED_BODY()
 	
@@ -30,20 +31,23 @@ public:
 	double DurabilityDegradation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost")
-	TMap<EGameItemTag, int32> CraftCost;
+	TMap<UResource*, int32> CraftCost;
 
 	UCardIngredient() : Super(EGameItemTag::CardIngredient),
-		Id(FGuid::NewGuid()), UseCost(0), DurabilityDegradation(0), CraftCost({
-			{EGameItemTag::SoulFragment, 0}}) {}
+		Id(FGuid::NewGuid()), UseCost(0), DurabilityDegradation(0), CraftCost({}) {}
 
 	UFUNCTION(BlueprintCallable)
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter);
+
+	int32 AggregateWorth() const;
 
 	virtual FString ToString_Implementation() const override;
 
 	virtual FText ToText_Implementation() const override;
 
 	virtual FText ToRichText_Implementation() const override;
+	
 protected:
 	FORCEINLINE void AddCost(UCard& OwningCard) const { OwningCard.Cost += this->UseCost; }
+	FORCEINLINE void ChangeDurability(UCard& OwningCard) const { OwningCard.Durability -= this->DurabilityDegradation; }
 };

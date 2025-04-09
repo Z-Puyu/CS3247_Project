@@ -18,7 +18,7 @@ UCardEffect* UCardEnchantmentMagic::ComposeTo(UCard* OwningCard, UCardEffect* Ef
 		Effect->SetEffect(UEnchantmentDamageEffect::StaticClass(), EnchantmentDamage);
 	}
 	
-	const double ExtraDamageAmount = static_cast<double>(*BaseDamage) * (this->Strength * Multiplier / 100.0);
+	const double ExtraDamageAmount = BaseDamage->GetTotal() * (this->Strength * Multiplier / 100.0);
 	const double CurrentDmg = EnchantmentDamage->Get(this->EnchantmentType);
 	EnchantmentDamage->Set(this->EnchantmentType, CurrentDmg + ExtraDamageAmount);
 	return Effect;

@@ -18,6 +18,9 @@ public:
 	UPROPERTY()
 	TObjectPtr<UIngredientMixer> Mixer;
 
+	UPROPERTY()
+	TObjectPtr<UCardImpact> Impact;
+
 	FORCEINLINE virtual FIngredientKey Unpack() const override { return FIngredientKey(this->Mixer, this->Id); }
 
 	virtual TArray<UCardEffect*> Build(UCard& OwningCard, double& ModifierPower) override;

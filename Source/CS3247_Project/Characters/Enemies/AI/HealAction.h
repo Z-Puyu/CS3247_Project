@@ -23,6 +23,8 @@ public:
 	
 	virtual FORCEINLINE bool IsReflexive() const override { return this->bIsReflexive; }
 
+	virtual FORCEINLINE bool IsAoe() const override { return this->bIsAoe; }
+
 	virtual FORCEINLINE FGameplayEffectDescriptor ToGameplayEffect() const override {
 		return FGameplayEffectDescriptor(
 			this->IsReflexive(),
@@ -36,4 +38,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	bool bIsReflexive;
 
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsAoe;
 };

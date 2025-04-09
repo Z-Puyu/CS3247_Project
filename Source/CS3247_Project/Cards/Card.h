@@ -7,6 +7,7 @@
 #include "Crafting/Card Effects/Data/CardEffect.h"
 #include "Card.generated.h"
 
+class UCardImpact;
 struct FRecipeEdge;
 class UCardIngredient;
 class ILocalisable;
@@ -22,19 +23,19 @@ class CS3247_PROJECT_API UCard : public UObject, public ILocalisable {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FText Name;
-
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(ExposeOnSpawn = "true"))
+	bool bIsDefault;
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	double Cost;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int Durability;
+	double Durability;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Instanced)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TArray<UCardEffect*> Effects;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(ExposeOnSpawn = "true"))
 	TObjectPtr<UCardRecipe> Recipe;
 	
 	UCard();
@@ -42,14 +43,11 @@ public:
 	virtual FText ToText_Implementation() const override;
 
 	virtual FText ToRichText_Implementation() const override;
-
-	UFUNCTION(BlueprintCallable, meta=(DeprecatedFunction = "true"))
-	void GetCardInfo(FText& CardName, FText& Desc, int& UseCost, int& CardDurability, TArray<UCardEffect*>& CardEffects) const;
-
+	
 	UFUNCTION(BlueprintCallable, Category = "Card Info")
 	FORCEINLINE void GetCardData(int& UseCost, int& CardDurability, TArray<UCardEffect*>& CardEffects) const {
 		UseCost = FMath::Max(1, FMath::Floor(this->Cost));
-		CardDurability = this->Durability;
+		CardDurability = FMath::CeilToInt32(this->Durability);
 		CardEffects = this->Effects;
 	}
 
@@ -57,6 +55,9 @@ public:
 	FORCEINLINE bool IsHostile() const {
 		return this->Effects.ContainsByPredicate([](const UCardEffect* E) -> bool { return E->IsHostile(); });
 	}
+
+	UFUNCTION(BlueprintCallable)
+	TArray<UCardImpact*> TopThreeImpacts() const;
 
 	FORCEINLINE bool operator==(const UCard& Other) const {
 		return this->Recipe == Other.Recipe;

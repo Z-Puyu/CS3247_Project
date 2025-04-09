@@ -12,27 +12,14 @@ AEnemyCharacter::AEnemyCharacter() {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AEnemyCharacter::SignalAttributeChange(const FGameplayAttribute& Attribute) const {
-	const UAbilitySystemComponent* AbilitySystem = this->GetAbilitySystemComponent();
-	bool bIsAttributeFound = false;
-	const float Curr = AbilitySystem->GetGameplayAttributeValue(Attribute, bIsAttributeFound);
-	float Max = 100.0f;
-	const UBasicAttributeSet* EnemyAttributeSet = Cast<UBasicAttributeSet>(
-		AbilitySystem->GetAttributeSet(UBasicAttributeSet::StaticClass()));
-	if (Attribute == EnemyAttributeSet->GetHealthAttribute()) {
-		Max = EnemyAttributeSet->GetMaxHealth();
-	}
-
-	this->OnAttributeUpdated.Broadcast(Attribute, Curr, Max);
-}
-
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay() {
-	Super::BeginPlay();
 	const UAbilitySystemComponent* AbilitySystem = this->GetAbilitySystemComponent();
 	if (IsValid(AbilitySystem)) {
 		this->AttributeSet = AbilitySystem->GetSet<UBasicAttributeSet>();
 	}
+
+    Super::BeginPlay();
 }
 
 void AEnemyCharacter::Destroyed() {
@@ -49,3 +36,10 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+bool AEnemyCharacter::GetIsDead() {
+	return this->isDead;
+}
+
+void AEnemyCharacter::SetIsDead() {
+	this->isDead = true;
+}

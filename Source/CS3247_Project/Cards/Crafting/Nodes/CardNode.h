@@ -35,7 +35,7 @@ public:
 	
 	virtual TArray<UCardEffect*> Build(UCard& OwningCard, double& ModifierPower);
 
-	//virtual TArray<UCardEffect*> Preview(double& ModifierPower);
+	TMap<UResource*, int32> GetSubtreeCost() const;
 
 	TArray<UCardNode*> GetSuccessors() const;
 

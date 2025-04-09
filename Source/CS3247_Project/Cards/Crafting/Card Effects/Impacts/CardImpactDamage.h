@@ -16,10 +16,7 @@ class CS3247_PROJECT_API UCardImpactDamage : public UCardImpact {
 
 public:
 	UPROPERTY(EditDefaultsOnly, meta=(Categories="Damage"))
-	FGameplayTag DamageType;
-
-	UPROPERTY(EditDefaultsOnly, meta=(Categories="Damage"))
-	int32 Value;
+	TMap<FGameplayTag, int32> Damages;
 	
 	virtual TArray<UCardEffect*> Apply(UCard* OwningCard) override;
 

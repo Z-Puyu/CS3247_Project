@@ -15,7 +15,7 @@ class CS3247_PROJECT_API UGameItem : public UDataAsset {
 	GENERATED_BODY()
 
 public:
-	UGameItem() : UGameItem(EGameItemTag::CardIngredient) {}
+	UGameItem() : ItemType(EGameItemTag::Resource) {};
 
 	explicit UGameItem(const EGameItemTag ItemType) : ItemType(ItemType) {}
 	

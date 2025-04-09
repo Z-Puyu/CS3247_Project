@@ -18,18 +18,6 @@ void ABasicCharacter::BeginPlay() {
 	Super::BeginPlay();
 }
 
-void ABasicCharacter::SignalAttributeChange(const FGameplayAttribute& Attribute) const {
-	return;
-}
-
-void ABasicCharacter::SignalAllAttributeUpdates() const {
-	TArray<FGameplayAttribute> Attributes = {};
-	this->GetAbilitySystemComponent()->GetAllAttributes(Attributes);
-	for (auto& Attribute : Attributes) {
-		this->SignalAttributeChange(Attribute);
-	}
-}
-
 TMap<FGameplayAttribute, float> ABasicCharacter::SaveAttributes() const {
 	TMap<FGameplayAttribute, float> SaveData = {};
 	TArray<FGameplayAttribute> Attributes = {};
@@ -42,8 +30,8 @@ TMap<FGameplayAttribute, float> ABasicCharacter::SaveAttributes() const {
     }
 	
     return SaveData;
-	
 }
+
 void ABasicCharacter::LoadAttributes(TMap<FGameplayAttribute, float> InAttributes) const {
 	for (auto& Entry : InAttributes) {
 		this->GetAbilitySystemComponent()

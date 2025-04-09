@@ -4,17 +4,22 @@
 #include "../../../GameplayAbilities/GameplayEffectDescriptor.h"
 #include "AiDecision.generated.h"
 
-class ABasicCharacter;
-class UEnemyAction;
 
+class ABasicCharacter;
+
+/**
+ * Represents the final AI choice of skill + targets.
+ */
 USTRUCT(BlueprintType)
 struct FAiDecision {
 	GENERATED_BODY()
+	
 public:
+	// GameplayEffects to apply when executing the decision
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TArray<FGameplayEffectDescriptor> SkillEffects;
 
-	// The target of the action. Use this to check if the skill should be reflexive.
+	// All recipients of this action
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TObjectPtr<ABasicCharacter> Target;
+	TArray<ABasicCharacter*> Targets;
 };

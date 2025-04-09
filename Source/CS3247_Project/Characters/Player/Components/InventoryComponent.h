@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "CS3247_Project/Common/GameItemTag.h"
+#include "../../../Common/GameItemTag.h"
+#include "CS3247_Project/Common/GameItem.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -31,9 +32,34 @@ protected:
 	int32 RemoveItem(const UGameItem* Item, int32 Quantity);
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE TMap<UGameItem*, int32> FetchAllOfType(const EGameItemTag ItemType) const { return this->Inventory[ItemType]; };
+	FORCEINLINE TMap<UGameItem*, int32> FetchAllOfType(const EGameItemTag ItemType) const {
+		if (!this->Inventory.Contains(ItemType)) {
+			return {};
+		}
+		
+		return this->Inventory[ItemType];
+	}
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool HasEnough(UGameItem* Item, const int32 Quantity) const {
+		return this->Count(Item) >= Quantity;
+	}
+	
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+
+private:
+	FORCEINLINE int32 Count(UGameItem* Item) const {
+		if (!this->Inventory.Contains(Item->ItemType)) {
+			return 0;
+		}
+		
+		if (!this->Inventory[Item->ItemType].Contains(Item)) {
+			return 0;
+		}
+		
+		return this->Inventory[Item->ItemType][Item];
+	}
 };

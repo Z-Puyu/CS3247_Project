@@ -7,7 +7,8 @@
 
 
 UCardEffect* UCardEnchantment::ComposeTo(UCard* OwningCard, UCardEffect* Current, double Multiplier) {
-	OwningCard->Cost += this->UseCost;
+	this->AddCost(*OwningCard);
+	this->ChangeDurability(*OwningCard);
 	return Current;
 }
 

@@ -11,8 +11,10 @@ TArray<UCardEffect*> UCardImpactDamage::Apply(UCard* OwningCard) {
 	TArray<UCardEffect*> Effects = Super::Apply(OwningCard);
 	for (const auto& Data : Effects) {
 		UDamageEffect* Dmg = NewObject<UDamageEffect>(Data);
-		Dmg->DamageType = this->DamageType;
-		Dmg->DamageValue = this->Value;
+		for (const auto& DamageData : this->Damages) {
+			Dmg->SetDamageValue(DamageData.Key, DamageData.Value);
+		}
+
 		Data->SetEffect(UDamageEffect::StaticClass(), Dmg);
 	}
 	
@@ -20,18 +22,27 @@ TArray<UCardEffect*> UCardImpactDamage::Apply(UCard* OwningCard) {
 }
 
 FString UCardImpactDamage::ToString_Implementation() const {
-	return FString::Printf(TEXT("%s damage: %d"),
-		*this->DamageType.GetTagName().ToString(), this->Value);
+	TStringBuilder<256> Sb;
+	TArray<FString> Lines = {}; 
+	for (const auto& DamageData : this->Damages) {
+		Lines.Add(FString::Printf(TEXT("%s damage: %d"), *DamageData.Key.GetTagName().ToString(), DamageData.Value));
+	}
+	
+	return Sb.Join(Lines, '\n').ToString();
 }
 
 FText UCardImpactDamage::ToText_Implementation() const {
-	return FText::Format(FTextFormat::FromString(TEXT("{0} {1} damage")),
-		this->Value, FText::FromString(this->DamageType.ToString()));
+	TStringBuilder<256> Sb;
+	TArray<FString> Lines = {}; 
+	for (const auto& DamageData : this->Damages) {
+		Lines.Add(FString::Printf(TEXT("%d %s damage"), DamageData.Value, *DamageData.Key.GetTagName().ToString()));
+	}
+	
+	return FText::FromString(Sb.Join(Lines, '\n').ToString());
 }
+
 FText UCardImpactDamage::ToRichText_Implementation() const {
-	return FText::Format(FTextFormat::FromString(TEXT("{0} {1} damage")),
-		UText::Red(FString::FromInt(this->Value)),
-		UText::BfIt(this->DamageType.ToString()));
+	return Execute_ToText(this);
 }
 
 

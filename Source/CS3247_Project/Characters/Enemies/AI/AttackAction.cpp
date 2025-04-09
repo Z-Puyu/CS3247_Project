@@ -19,7 +19,7 @@ UAttackAction::UAttackAction() {
 float UAttackAction::Evaluate(const UWorld* World, const FAiDecisionContext& Context) const {
 	UBasicGameInstance* GameInstance = Cast<UBasicGameInstance>(UGameplayStatics::GetGameInstance(World));
 	// You can only attack the player. Otherwise, something wild is happening.
-	const ABasicCharacter* Target = Context.TargetData;
+	const ABasicCharacter* Target = Context.TargetsData[0];
 	const UAbilitySystemComponent* TargetAbilitySystem = Target->GetAbilitySystemComponent();
 	const UBasicAttributeSet* TargetAttributes = Cast<UBasicAttributeSet>(
 		Target->GetAbilitySystemComponent()->GetAttributeSet(UBasicAttributeSet::StaticClass()));

@@ -34,6 +34,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "Deck")
 	FOnAddCardDispatcher OnAddCard;
 
+	/**
+	 * Add a card to the player's deck and broadcast an "OnAddCard" event.
+	 * @param Card The new card added.
+	 */
 	UFUNCTION(BlueprintCallable)
 	void AddCard(UCard* Card);
 

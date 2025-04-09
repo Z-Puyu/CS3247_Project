@@ -25,8 +25,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Status")
 	void PlayerIsDead();
-	
-	virtual void SignalAttributeChange(const FGameplayAttribute& Attribute) const override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS", meta=(AllowPrivateAccess="true"))
@@ -39,6 +37,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	int MaxHP;
 
+	void InitialiseAttributesUIData();
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -46,3 +45,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };
+
+
+

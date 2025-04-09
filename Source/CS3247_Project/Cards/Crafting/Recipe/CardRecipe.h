@@ -7,6 +7,8 @@
 #include "UObject/Object.h"
 #include "CardRecipe.generated.h"
 
+class UResource;
+class UCardImpact;
 class UCardEffect;
 class UDeckComponent;
 struct FRecipeEdge;
@@ -22,14 +24,22 @@ class CS3247_PROJECT_API UCardRecipe : public UObject, public ILocalisable {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintReadOnly)
+	FName Name;
+	
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UCardNode> Source;
 
 	UFUNCTION(BlueprintCallable)
-	UCard* Forge(UDeckComponent* PlayerDeckComponent) const;
+	TMap<UResource*, int32> GetCosts() const;
+
+	UFUNCTION(BlueprintCallable)
+	UCard* Forge(UDeckComponent* PlayerDeckComponent, const bool bIsDefault = false);
 
 	UFUNCTION(BlueprintCallable)
 	TArray<FRecipeEdge> ToEdgeList();
+	
+	TArray<UCardImpact*> FetchImpacts() const;
 
 	virtual FText ToText_Implementation() const override;
 

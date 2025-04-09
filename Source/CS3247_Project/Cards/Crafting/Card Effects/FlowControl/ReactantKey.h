@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "../Impacts/CardImpact.h"
 #include "ReactantKey.generated.h"
 
 USTRUCT()
@@ -8,8 +9,11 @@ struct FReactantKey {
 	GENERATED_BODY()
 	
 public:
-	FGuid First;
-	FGuid Second;
+	UPROPERTY(EditAnywhere)
+	TSoftObjectPtr<UCardImpact> First;
+
+	UPROPERTY(EditAnywhere)
+	TSoftObjectPtr<UCardImpact> Second;
 
 	bool operator==(const FReactantKey& Other) const {
 		return (this->First == Other.First && this->Second == Other.Second) ||
@@ -23,7 +27,7 @@ public:
 	friend uint32 GetTypeHash(const FReactantKey& Key) {
 		const uint32 HashA = GetTypeHash(Key.First);
 		const uint32 HashB = GetTypeHash(Key.Second);
-		if (Key.First < Key.Second) {
+		if (HashA < HashB) {
 			return HashCombine(HashA, HashB);
 		}
 		

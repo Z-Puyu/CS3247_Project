@@ -4,9 +4,19 @@
 #include "CardIngredient.h"
 #include "../Card Effects/Data/CardEffect.h"
 #include "../../../Cards/Card.h"
+#include "../../../Items/Resources/Resource.h"
 
 UCardNode* UCardIngredient::WrapIntoNode(UActorComponent* CardCrafter) {
 	return nullptr;
+}
+
+int32 UCardIngredient::AggregateWorth() const {
+	int32 TotalWorth = 0;
+	for (auto& Entry : this->CraftCost) {
+		TotalWorth += Entry.Key->Worth * Entry.Value;
+	}
+
+	return TotalWorth;
 }
 
 FString UCardIngredient::ToString_Implementation() const {

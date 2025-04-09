@@ -45,40 +45,68 @@ float UUtilityAiComponent::Evaluate(const UEnemySkill& Action, const FAiDecision
 }
 
 FAiDecision UUtilityAiComponent::Decide(const FCombatContext& Context) const {
-	AEnemyCharacter* Self = Context.SelfData;
-	APlayerCharacter* Player = Context.PlayerData;
-	TArray<AEnemyCharacter*> Enemies = Context.Enemies;
+    // Retrieve context data
+    AEnemyCharacter* Self = Context.SelfData;
+    APlayerCharacter* Player = Context.PlayerData;
+    TArray<AEnemyCharacter*> Enemies = Context.Enemies;
 
-	float MaxScore = -1;
-	FAiDecision BestDecision;
-	// Evaluate each possible skill.
-	for (auto& Skill : this->StrategySpace) {
-		if (Skill->IsApplicableTo(Self, Player)) {
-			// If the skill is meant to attack the player, only consider the player as the target.
-			FAiDecisionContext DecisionContext = FAiDecisionContext(Self, Player, Player);
-			const float Score = this->Evaluate(*Skill, DecisionContext);
-			if (Score > MaxScore) {
-				MaxScore = Score;
-				BestDecision = FAiDecision(Skill->ToGameplayEffects(), Player);
-			}
-		} else {
-			// If the skill is meant to be used on allies, consider all allies including the enemy itself.
-			for (auto& Enemy : Enemies) {
-				if (!Skill->IsApplicableTo(Self, Enemy)) {
-					continue;
-				}
-				
-				FAiDecisionContext DecisionContext = FAiDecisionContext(Self, Player, Enemy);
-				const float Score = this->Evaluate(*Skill, DecisionContext);
-				if (Score > MaxScore) {
-					MaxScore = Score;
-					BestDecision = FAiDecision(Skill->ToGameplayEffects(), Enemy);
-				}
-			}
-		}
-	}
-	
-	return BestDecision;
+    float MaxScore = -1.f;
+    FAiDecision BestDecision;
+
+    // Iterate over each possible skill in our strategy space
+    for (auto& Skill : this->StrategySpace) {
+        // Hostile branch: if the skill is applicable to the Player, we assume it is hostile.
+        if (Skill->IsApplicableTo(Self, Player)) {
+            TArray<ABasicCharacter*> SingleTarget;
+            SingleTarget.Add(Player);
+            FAiDecisionContext DecisionContext(Self, Player, SingleTarget);
+            float Score = this->Evaluate(*Skill, DecisionContext);
+            if (Score > MaxScore) {
+                MaxScore = Score;
+                BestDecision = FAiDecision(Skill->ToGameplayEffects(), SingleTarget);
+            }
+        }
+        // AoE branch: if the skill is marked as AOE, gather all valid allies (and self, if applicable)
+        else if (Skill->IsAoe()) {
+            TArray<ABasicCharacter*> AoeTargets;
+            for (AEnemyCharacter* Ally : Enemies) {
+                if (Skill->IsApplicableTo(Self, Ally)) {
+                    AoeTargets.Add(Ally);
+                }
+            }
+            // Optionally include self if applicable
+            if (Skill->IsApplicableTo(Self, Self)) {
+                AoeTargets.Add(Self);
+            }
+            // Only evaluate if we found at least one valid target.
+            if (AoeTargets.Num() > 0) {
+                FAiDecisionContext DecisionContext(Self, Player, AoeTargets);
+                float Score = this->Evaluate(*Skill, DecisionContext);
+                if (Score > MaxScore) {
+                    MaxScore = Score;
+                    BestDecision = FAiDecision(Skill->ToGameplayEffects(), AoeTargets);
+                }
+            }
+        }
+        // Non-hostile, non-AOE branch: single-target actions for allies (e.g. a single-target heal)
+        else {
+            for (AEnemyCharacter* Enemy : Enemies) {
+                if (!Skill->IsApplicableTo(Self, Enemy)) {
+                    continue;
+                }
+                TArray<ABasicCharacter*> SingleTarget;
+                SingleTarget.Add(Enemy);
+                FAiDecisionContext DecisionContext(Self, Player, SingleTarget);
+                float Score = this->Evaluate(*Skill, DecisionContext);
+                if (Score > MaxScore) {
+                    MaxScore = Score;
+                    BestDecision = FAiDecision(Skill->ToGameplayEffects(), SingleTarget);
+                }
+            }
+        }
+    }
+
+    return BestDecision;
 }
 
 // Called every frame

@@ -23,6 +23,8 @@ public:
 
 	FORCEINLINE virtual bool IsHostile() const override { return true; }
 
+	FORCEINLINE virtual bool IsAoe() const override { return false; }
+
 	FORCEINLINE virtual bool IsReflexive() const override { return false; }
 
 	virtual FORCEINLINE FGameplayEffectDescriptor ToGameplayEffect() const override {

@@ -8,6 +8,7 @@
 
 void UIngredientBrancher::Merge(UCard* OwningCard, TArray<UCardEffect*>& LeftEffects, const TArray<UCardEffect*>& RightEffects) const {
 	this->AddCost(*OwningCard);
+	this->ChangeDurability(*OwningCard);
 	LeftEffects.Append(RightEffects);
 }
 

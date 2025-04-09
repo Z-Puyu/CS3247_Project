@@ -5,6 +5,7 @@
 
 UENUM(BlueprintType)
 enum class EGameItemTag : uint8 {
-	CardIngredient UMETA(DisplayName = "Card Ingredient"),
-	SoulFragment  UMETA(DisplayName = "Soul Fragment")
+	CardIngredient UMETA(DisplayName = "Charm"),
+	Resource       UMETA(DisplayName = "Resource"),
+	Document  UMETA(DisplayName = "Document")
 };

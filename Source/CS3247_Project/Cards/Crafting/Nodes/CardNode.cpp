@@ -30,7 +30,7 @@ bool UCardNode::AddSuccessor(UCardNode* Node, FText& ErrorMsg) {
 
 	if (!IsValid(this->SecondSuccessor)) {
 		this->SecondSuccessor = Node;
-		Node->Predecessor = Node;
+		Node->Predecessor = this;
 		return true;
 	}
 
@@ -86,9 +86,19 @@ TArray<UCardEffect*> UCardNode::Build(UCard& OwningCard, double& ModifierPower) 
 	return {};
 }
 
-/*TArray<UCardEffect*> UCardNode::Preview(double& ModifierPower) {
-	return {};
-}*/
+TMap<UResource*, int32> UCardNode::GetSubtreeCost() const {
+	TMap<UResource*, int32> Cost = {};
+	if (this->FirstSuccessor) {
+		Cost.Append(this->FirstSuccessor->GetSubtreeCost());
+	}
+
+	if (this->SecondSuccessor) {
+		Cost.Append(this->SecondSuccessor->GetSubtreeCost());
+	}
+
+	Cost.Append(this->Unpack().Ingredient->CraftCost);
+	return Cost;
+}
 
 TArray<UCardNode*> UCardNode::GetSuccessors() const {
 	if (this->FirstSuccessor && this->SecondSuccessor) {

@@ -18,8 +18,11 @@
 UCLASS()
 class CS3247_PROJECT_API UBasicAttributeSet : public UAttributeSet {
 	GENERATED_BODY()
-
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChangedDispatcher, const FGameplayAttribute, Attribute, const int32, OldValue, const int32, CurrentValue);
 public:
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedDispatcher OnAttributeChanged;
+	
 	ATTRIBUTE_ACCESSORS(UBasicAttributeSet, Health)
 	ATTRIBUTE_ACCESSORS(UBasicAttributeSet, MaxHealth)
 	ATTRIBUTE_ACCESSORS(UBasicAttributeSet, Defence)
@@ -68,6 +71,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attributes")
 	FGameplayAttributeData ElectricResistance;
+
+	
 protected:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+
+	virtual bool PreGameplayEffectExecute(struct FGameplayEffectModCallbackData& Data) override;
+
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 };

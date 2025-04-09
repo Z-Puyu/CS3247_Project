@@ -23,4 +23,14 @@ public:
 	virtual TArray<UCardEffect*> Apply(UCard* OwningCard);
 
 	virtual UCardNode* WrapIntoNode(UActorComponent* CardCrafter) override;
+
+	bool operator<(UCardImpact* Other) const;
+	
+	bool operator>(const UCardImpact& Other) const;
+
+	bool operator<(const UCardImpact& Other) const;
+
+	bool operator>=(const UCardImpact& Other) const;
+
+	bool operator<=(const UCardImpact& Other) const;
 };

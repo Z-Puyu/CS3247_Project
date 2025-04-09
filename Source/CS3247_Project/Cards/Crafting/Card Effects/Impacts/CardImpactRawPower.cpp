@@ -11,8 +11,7 @@ TArray<UCardEffect*> UCardImpactRawPower::Apply(UCard* OwningCard) {
 	TArray<UCardEffect*> Effects = Super::Apply(OwningCard);
 	for (const auto& Effect : Effects) {
 		UDamageEffect* RawPowerDamage = NewObject<UDamageEffect>(Effect);
-		RawPowerDamage->DamageType = FGameplayTag::RequestGameplayTag(FName("GameData.Damage"));
-		RawPowerDamage->DamageValue = this->RawPower;
+		RawPowerDamage->SetDamageValue(FGameplayTag::RequestGameplayTag(FName("GameData.Damage")), this->RawPower);
 		Effect->SetEffect(UDamageEffect::StaticClass(), RawPowerDamage);
 	}
 

@@ -12,10 +12,19 @@ UCLASS(Abstract, Blueprintable, BlueprintType)
 class CS3247_PROJECT_API ABasicCharacter : public ACharacter, public IAbilitySystemInterface {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeUpdatedDispatcher, const FGameplayAttribute&, Attribute, int32, CurrentValue, int32, MaxValue);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttributeUpdatedDispatcher, const FGameplayAttribute&, Attribute, int32, OldValue, int32, CurrentValue, int32, MaxValue);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNewTurnStatedDispatcher);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathDispatcher);
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnAttributeUpdatedDispatcher OnAttributeUpdated;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnNewTurnStatedDispatcher OnNewTurnStarted;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnDeathDispatcher OnDeath;
+	
 	// Sets default values for this character's properties
 	ABasicCharacter();
 
@@ -29,13 +38,7 @@ public:
 	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override {
 		return AbilitySystemComponent;
 	}
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void SignalAttributeChange(const FGameplayAttribute& Attribute) const;
 
-	UFUNCTION(BlueprintCallable)
-	void SignalAllAttributeUpdates() const;
-	
 	UFUNCTION(BlueprintCallable)
 	TMap<FGameplayAttribute, float> SaveAttributes() const;
 
@@ -47,6 +50,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int32 GetAttribute(const FGameplayAttribute& Attribute) const {
 		bool bFound = false;
 		const int32 CurrValue = this->GetAbilitySystemComponent()->GetGameplayAttributeValue(Attribute, bFound);

@@ -17,15 +17,38 @@ class CS3247_PROJECT_API UDamageEffect : public UAtomicCardEffect {
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FGameplayTag DamageType;
-
-	UPROPERTY(EditAnywhere)
-	double DamageValue;
+	TMap<FGameplayTag, double> Damages;
 	
-	UDamageEffect() : DamageValue(0) {}
+	UDamageEffect() : Damages({}) {}
+
+	FORCEINLINE void SetDamageValue(const FGameplayTag DamageType, const double Value) {
+		if (this->Damages.Contains(DamageType)) {
+			this->Damages[DamageType] += Value;
+		} else {
+			this->Damages.Add(DamageType, Value);
+		}
+	}
 	
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE int32 GetDamageValue() const { return FMath::CeilToInt(DamageValue); }
+	FORCEINLINE TMap<FGameplayTag, int32> GetDamageValues() const {
+		TMap<FGameplayTag, int32> DamageValues = {};
+		for (const auto& Damage : this->Damages) {
+			DamageValues.Add(Damage.Key, FMath::CeilToInt(Damage.Value));
+		}
+		
+		return DamageValues;
+	}
+
+	FORCEINLINE double GetTotal() const {
+		TArray<double> Values;
+		this->Damages.GenerateValueArray(Values);
+		double Sum = 0;
+		for (const auto& Value : Values) {
+			Sum += Value;
+		}
+
+		return Sum;
+	}
 
 	virtual FString ToString_Implementation() const override;
 
@@ -36,18 +59,4 @@ public:
 	virtual void ScaleStrength(const double Ratio) override;
 
 	virtual void OffsetStrength(const double Offset) override;
-
-	bool operator> (const int32 Value) const;
-
-	bool operator< (const int32 Value) const;
-
-	bool operator== (const int32 Value) const;
-
-	bool operator!= (const int32 Value) const;
-
-	bool operator>= (const int32 Value) const;
-
-	bool operator<= (const int32 Value) const;
-
-	FORCEINLINE explicit operator double() const { return this->DamageValue; }
 };

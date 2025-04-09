@@ -14,13 +14,12 @@ APlayerCharacter::APlayerCharacter() {
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay() {
-	Super::BeginPlay();
 	const UAbilitySystemComponent* AbilitySystem = this->GetAbilitySystemComponent();
 	if (IsValid(AbilitySystem)) {
 		this->AttributeSet = AbilitySystem->GetSet<UPlayerAttributeSet>();
 	}
 
-	CurrHP = MaxHP;
+	Super::BeginPlay();
 }
 
 int APlayerCharacter::GetPlayerHealth() const {
@@ -40,22 +39,23 @@ void APlayerCharacter::PlayerIsDead() {
 	UE_LOG(LogTemp, Log, TEXT("Player is Dead!"));
 }
 
-void APlayerCharacter::SignalAttributeChange(const FGameplayAttribute& Attribute) const {
-	const UAbilitySystemComponent* AbilitySystem = this->GetAbilitySystemComponent();
+void APlayerCharacter::InitialiseAttributesUIData() {
 	bool bIsAttributeFound = false;
-	const float Curr = AbilitySystem->GetGameplayAttributeValue(Attribute, bIsAttributeFound);
-	float Max = 100.0f;
-	const UPlayerAttributeSet* PlayerAttributeSet = Cast<UPlayerAttributeSet>(
-		AbilitySystem->GetAttributeSet(UPlayerAttributeSet::StaticClass()));
-	if (Attribute == PlayerAttributeSet->GetHealthAttribute()) {
-		Max = PlayerAttributeSet->GetMaxHealth();
-	} else if (Attribute == PlayerAttributeSet->GetManaAttribute()) {
-		Max = PlayerAttributeSet->GetMaxMana();
-	} else if (Attribute == PlayerAttributeSet->GetMaxManaAttribute() || Attribute == PlayerAttributeSet->GetMaxHealthAttribute()) {
-		Max = static_cast<float>(INT32_MAX);
-	}
+	TArray<FGameplayAttribute> Attributes;
+	this->AbilitySystemComponent->GetAllAttributes(Attributes);
+	for (const auto& Attribute : Attributes) {
+		const float Curr = this->AbilitySystemComponent->GetGameplayAttributeValue(Attribute, bIsAttributeFound);
+		float Max = 100.0f;
+		if (Attribute == this->AttributeSet->GetHealthAttribute()) {
+			Max = this->AttributeSet->GetMaxHealth();
+		} else if (Attribute == this->AttributeSet->GetManaAttribute()) {
+			Max = this->AttributeSet->GetMaxMana();
+		} else if (Attribute == this->AttributeSet->GetMaxManaAttribute() || Attribute == this->AttributeSet->GetMaxHealthAttribute()) {
+			Max = static_cast<float>(INT32_MAX);
+		}
 
-	this->OnAttributeUpdated.Broadcast(Attribute, Curr, Max);
+		this->OnAttributeUpdated.Broadcast(Attribute, Curr, Curr, Max);
+	}
 }
 
 // Called every frame
@@ -67,4 +67,3 @@ void APlayerCharacter::Tick(float DeltaTime) {
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-
