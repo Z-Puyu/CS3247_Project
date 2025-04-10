@@ -37,4 +37,11 @@ public:
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FLoot> PossibleLoots;
+
+	/**
+	* Assoicate the data asset with the enemy spawning
+	*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy|Spawning")
+	TSubclassOf<class AEnemyCharacter> EnemyClass;
+
 };

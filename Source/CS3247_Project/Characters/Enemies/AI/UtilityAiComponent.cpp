@@ -35,7 +35,11 @@ float UUtilityAiComponent::Evaluate(const UEnemySkill& Action, const FAiDecision
 	for (auto& Effect : Action.Effects) {
 		// For each action effect, normalise its raw utility to [0, 1].
 		const float EffectRawScore = Effect->Evaluate(GetWorld(), Context) * RandomMultiplier;
-		const float EffectScore = this->EvaluationCurves[Effect->GetClass()].GetRichCurveConst()->Eval(EffectRawScore);
+        float EffectScore = 0;
+        if (const FRuntimeFloatCurve* FoundCurve = EvaluationCurves.Find(Effect->GetClass()))
+        {
+            EffectScore = FoundCurve->GetRichCurveConst()->Eval(EffectRawScore);
+        }
 		Total += EffectScore;
 		Max = FMath::Max(Max, EffectScore);
 	}
