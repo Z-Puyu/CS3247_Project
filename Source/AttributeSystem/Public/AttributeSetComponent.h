@@ -16,9 +16,11 @@ class ATTRIBUTESYSTEM_API UAttributeSetComponent final : public UActorComponent 
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(VisibleInstanceOnly)
 	TMap<FGameplayTag, FAttribute> BaseAttributeValues;
+	UPROPERTY(VisibleInstanceOnly)
 	TMap<FGameplayTag, int32> BonusAttributeValues;
-	UPROPERTY()
+	UPROPERTY(VisibleInstanceOnly)
 	TObjectPtr<UModifierMediator> ModifierMediator;
 	TSet<FGameplayTag> DirtyAttribute;
 
@@ -32,10 +34,6 @@ private:
 	}
 
 	void Recompute(const FGameplayTag& Attribute);
-	
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
 	
 public:
 	FAttribute Query(const FGameplayTag& Name);

@@ -13,7 +13,7 @@ class ATTRIBUTESYSTEM_API UModifierMediator : public UObject {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleInstanceOnly)
 	TMap<FGameplayTag, FModifier> Modifiers;
 
 	void Add(const FGameplayTag& Target, const FModifier& Modifier);

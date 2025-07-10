@@ -2,30 +2,18 @@
 
 
 #include "AttributeSetComponent.h"
-
 #include "Attribute.h"
 #include "ModifierMediator.h"
 
-
-// Sets default values for this component's properties
 UAttributeSetComponent::UAttributeSetComponent() {
-    // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-    // off to improve performance if you don't need them.
     PrimaryComponentTick.bCanEverTick = false;
-    this->ModifierMediator = NewObject<UModifierMediator>(this);
+    this->ModifierMediator = this->CreateDefaultSubobject<UModifierMediator>("Modifier Mediator");
 }
 
 
 void UAttributeSetComponent::Recompute(const FGameplayTag& Attribute) {
     const int32 Base = this->BaseAttributeValues.FindOrAdd(Attribute, FAttribute::Zero(Attribute)).Value;
     this->BonusAttributeValues[Attribute] = this->ModifierMediator->QueryBonus(Attribute, Base);
-}
-
-// Called when the game starts
-void UAttributeSetComponent::BeginPlay() {
-    Super::BeginPlay();
-
-    // ...
 }
 
 FAttribute UAttributeSetComponent::Query(const FGameplayTag& Name) {
