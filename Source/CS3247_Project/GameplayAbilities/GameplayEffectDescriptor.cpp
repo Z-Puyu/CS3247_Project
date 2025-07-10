@@ -1,1 +1,0 @@
-﻿#include "GameplayEffectDescriptor.h"
